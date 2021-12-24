@@ -1,0 +1,4867 @@
+﻿<usermanual>
+___________________________________________________________________________________________________________________	
+
+										*Director Task*
+							-A Theory-of-Mind Experimental Procedure-
+___________________________________________________________________________________________________________________	
+
+Script Author: Katja Borchert, Ph.D. (katjab@millisecond.com) for Millisecond Software, LLC
+Date: 02-14-2020
+last updated:  06-30-2020 by K. Borchert (katjab@millisecond.com) for Millisecond Software, LLC
+
+Script Copyright © 06-30-2020 Millisecond Software
+
+___________________________________________________________________________________________________________________
+BACKGROUND INFO 	
+___________________________________________________________________________________________________________________	
+
+This script implements the Director Task; a computerized task to study theory-of-mind development in
+in children and adolescents.
+
+The implemented procedure is based on Dumontheil et al (2010).
+
+Reference
+Dumontheil, I., Apperly, I., & Blakemore, S.-J. (2010). Online usage of theory of mind continues to 
+develop in late adolescence, Developmental science, 13, 331–338.
+10.1111/j.1467-7687.2009.00888.x
+
+original e-prime program at:
+https://sites.google.com/site/idcnlab/director-task?authuser=0
+
+___________________________________________________________________________________________________________________
+TASK DESCRIPTION	
+___________________________________________________________________________________________________________________
+
+Participants are asked to move objects within a cupboard from one cubby to another.
+Some of the objects are located in cubbies that have a 'see through' back; others are located
+in cubbies that are opaque (gray background).
+
+The task is run under two conditions:
+
+1. Director Present (DP):
+The instructions to move the objects are given by an instructor/director who is standing behind the
+cupboard. This director can only 'see' the objects in the 'see through' cubbies.
+The given instructions thus only apply to those objects that the director can see.
+Participants have to take the point of view of the director into account to choose the correct object
+to move.
+
+2. Director Absent (DA) - Control Condition:
+Rather than using 'point of view' as the guiding theme to follow instructions, 
+participants are explicitly told to ignore objects in the cubbies with gray background
+when following to the instructions.
+
+___________________________________________________________________________________________________________________	
+DURATION 
+___________________________________________________________________________________________________________________	
+the default set-up of the script takes appr. 15 minutes to complete
+
+___________________________________________________________________________________________________________________	
+DATA FILE INFORMATION 
+___________________________________________________________________________________________________________________		
+The default data stored in the data files are:
+
+(1) Raw data file: 'directortask_raw*.iqdat' (a separate file for each participant)*
+
+
+build:								The specific Inquisit version used (the 'build') that was run
+computer.platform:					the platform the script was run on (win/mac/ios/android)
+date, time, 						date and time script was run 
+subject, group, 					with the current subject/groupnumber
+session:							with the current session id
+
+blockcode, blocknum:				the name and number of the current block (built-in Inquisit variable)
+trialcode, trialnum: 				the name and number of the currently recorded trial (built-in Inquisit variable)
+										Note: trialnum is a built-in Inquisit variable; it counts all trials run; even those
+										that do not store data to the data file. 
+										
+setOrder_DP:						the set order (1-3) the DP-'Director Present' trials run
+setOrder_DA:						the set order (1-3) the DA-'Director Absent' trials run
+
+test:								1: DP (order 1) -> DA (order 2)
+									2: DP (order 2) -> DA (order 3)
+									3: DP (order 3) -> DA (order 1)
+									4: DP (order 2) -> DA (order 1)
+									5: DP (order 3) -> DA (order 2)
+									6: DP (order 1) -> DA (order 3)
+									Note: the tests are selected by groupnumber
+
+condition: 							1 = "Director Present"; 2 = "Director Absent"
+
+set: 								the set the current trial belongs to (1-16) for the current condition Note: each set is assigned a specific visual stimulus
+actualSet:							set 1-32 (Note: a total of 32 sets are used)
+
+trialtype: 							the trialtype of the current trial (filler, control, experimental)
+setitemnumber: 						the itemnumber of the current set (1-3) Note: there are three items per set
+taskInstructions:					the presented task instructions in visual format
+
+image:								the original image belonging to the current trial
+										Note: the original images contain different image representation of the objects 
+										used in this script
+
+soundfile:							the presented soundfile (taskinstructions in audio format)
+correctAnswer1:						the correct location box of the object that should be moved (A-P)
+correctAnswer2:						the correct location box that the object should be moved TO (A-P)
+wrongAnswer:						the location of the foil object in experimental trials
+
+blocktype:							1 = block of 3 trials containing a control trial + 2 fillers; 
+									2 = block of 3 trials containing an experimental trial + 2 fillers
+								
+position:							position of the Control or Experimental instruction among the 3 trials associated with each visual stimulus (1-3) Example: position = 1 => the current controlexp trial is run as the first trial with the current visual stimulus
+
+Dependent Variables:
+answer1: 							the original location box of the object that was moved (A-P)
+answer2:							the location box that participant moved the object TO (A-P)
+correct1:							correctness of answer1 (1 = correct; 0 = otherwise)
+foilSelected:						1 = wrong (foil) answer in an experimental trial was selected; 0 = in any other case
+correct2:							correctness of answer2 (1 = correct; 0 = otherwise)
+answer1RT:							stores the latency of answer1 (the selection of the moved object; measured from onset of soundfile)
+answer2RT:							stores the latency of answer2 (the drop latency of the moved object; measured from onset of soundfile)
+
+countWrongAnswers_DP:				counts the number of answer1 in experimental DP trials that are the dedicated 'wrong' answers
+countWrongAnswers_DA:				counts the number of answer1 in experimental DA trials that are the dedicated 'wrong' answers
+
+
+droppedObject:						stores the object that was dropped into a different cubby									
+
+built-in DV Variables:
+										
+response:							the participant's response 
+correct:							accuracy of response: 1 = correct selection of dropped object (answer1); 0 = otherwise
+latency: 							the response latency (in ms); measured from: onset of soundfile
+
+parameters.debug_showoriginalcupboardimages: 	should be set to false (0) for testing
+
+
+(2) Summary data file: 'directortask_summary*.iqdat' (a separate file for each participant)*
+
+computer.platform:					the platform the script was run on (win/mac/ios/android)
+script.startdate:					date script was run
+script.starttime:					time script was started
+script.subjectid:					assigned subject id number
+script.groupid:						assigned group id number
+script.sessionid:					assigned session id number
+script.elapsedtime:					time it took to run script (in ms); measured from onset to offset of script
+script.completed:					0 = script was not completed (prematurely aborted); 
+									1 = script was completed (all conditions run)
+									
+****Experimental DP Condition****									
+									
+PropCorrect1_exp_DP:				proportion correct object selection in experimental DP trials		 
+numberErrors1_exp_DP: 				number of incorrect object selections in experimental DP trials
+
+
+trialcount_exp_DP:					number of experimental trials run in the DP condition
+
+numberCorrect1_exp_DP:				number of correct object selections (answer1) in experimental DP trials
+PropCorrect1_exp_DP: 				proportion correct object selection in experimental DP trials	
+numberErrors1_exp_DP: 				number of general incorrect object selections in experimental DP trials
+countWrongAnswers_DP:				number of times participants chose the dedicated foil object in experimental DP trials
+
+meanCorrRT1_exp_DP:					mean time (in ms) it took participant to select the object in experimental DP trials
+									(measured from: onset of soundfile; Note: all soundfiles are 2200ms long)
+
+numberCorrect2_exp_DP:				number of times objects were dropped in the correct final position (answer 2) in experimental DP trials
+PropCorrect2_exp_DP:				proportion correct object drop-offs in experimental DP trials
+
+meanCorrRT2_exp_DP:					mean time (in ms) it took participant to drop off the objects in experimental DP trials		
+									(measured from: onset of soundfile; Note: all soundfiles are 2200ms long)									
+									
+****Control DP Condition****									
+									
+PropCorrect1_ctrl_DP:				proportion correct object selection in control DP trials		 
+numberErrors1_ctrl_DP: 				number of incorrect object selections in control DP trials
+
+
+trialcount_ctrl_DP:					number of control trials run in the DP condition
+
+numberCorrect1_ctrl_DP:				number of correct object selections (answer1) in control DP trials
+PropCorrect1_ctrl_DP: 				proportion correct object selection in control DP trials	
+
+meanCorrRT1_ctrl_DP:				mean time (in ms) it took participant to select the object in control DP trials
+									(measured from: onset of soundfile; Note: all soundfiles are 2200ms long)
+
+numberCorrect2_ctrl_DP:				number of times objects were dropped in the correct final position (answer 2) in control DP trials
+PropCorrect2_ctrl_DP:				proportion correct object drop-offs in control DP trials
+
+meanCorrRT2_ctrl_DP:				mean time (in ms) it took participant to drop off the objects in control DP trials		
+									(measured from: onset of soundfile; Note: all soundfiles are 2200ms long)									
+									
+									
+same for experimental/control DA trials									
+									
+															
+							
+* separate data files: to change to one data file for all participants (on Inquisit Lab only), go to section
+"DATA" and follow further instructions
+
+___________________________________________________________________________________________________________________	
+EXPERIMENTAL SET-UP 
+___________________________________________________________________________________________________________________	
+
+Participants run the task under 2 conditions: Director Present (DP) and Director Absent (DA, control
+condition). The DP condition is always run before the DA condition.
+
+1. DP condition
+- 16 different cupboard set-ups; each used for 3 consecutive trials (= 48 trials total)
+- 8 of the 48 trials are experimental trials (experimental trials present foil objects in cubbies with gray backgrounds that need to be ignored to follow the instructions)
+- 8 of the 48 trials are control trials (comparable cupboard to experimental trials except the foil object was replaced with an irrelevant object)
+- 32 trials are filler trials (filler trials only applied to objects in clear cubbies)
+=> the order of the trials is fixed*
+
+2. DA condition
+- 16 different cupboard set-ups; each used for 3 consecutive trials (= 48 trials total)
+- 8 of the 48 trials are experimental trials (experimental trials present foil objects in cubbies with gray backgrounds that need to be ignored to follow the instructions)
+- 8 of the 48 trials are control trials (comparable cupboard to experimental trials except the foil object was replaced with an irrelevant object)
+- 32 trials are filler trials (filler trials only applied to objects in clear cubbies)
+=> the order of the trials is fixed*
+Note: the cupboard set-ups were identical in the DP and DA condition but contain different objects.
+
+Trial Sequence:
+- cupboard setup presented for 2000ms (default; editable parameter)
+- soundfile played after 2000ms (each soundfile plays for 2200ms)
+- response times measured from onset of soundfile
+
+Cupboard setup:
+The stimuli show a 4 x 4 set of shelves containing eight different objects (with 5 'gray' cubbies)
+
+*Fixed Trialsequences
+3 different trial orders were created by Dumontheil et al (2010) (order1, order2, order3);
+resulting in 6 different test orders when used in DP/DA conditions
+Test1: DP (order1) -> DA (order2); Test4: DP (order2) -> DA (order1)
+Test2: DP (order2) -> DA (order3); Test5: DP (order3) -> DA (order2)
+Test3: DP (order3) -> DA (order1); Test6: DP (order1) -> DA (order3)
+=> the 6 different tests are selected by groupnumber in this script
+
+___________________________________________________________________________________________________________________
+STIMULI
+___________________________________________________________________________________________________________________
+
+This script makes use of material (images/soundfiles) made available by Dumontheil et al (2010) at 
+https://sites.google.com/site/idcnlab/director-task?authuser=0
+
+This script uses drag/drop functionality to move objects within the cupboards which is different from
+the original procedure which uses mouseclicks of the target objects followed by 'pretend' moves
+
+The individual objects used in this script were downloaded from: www.coolclips.com
+to re-create the original cupboard images provided by Dumontheil et al (2010).
+
+Note: the provided soundfiles are delivered in British English and contain British English vocabulary
+(e.g lorry)
+
+___________________________________________________________________________________________________________________	
+INSTRUCTIONS 
+___________________________________________________________________________________________________________________	
+
+This script uses the instructions provided by Dumontheil et al (2010).
+In some cases the instructions were slightly altered to reflect the changes in object drag and drop
+functionality implemented in this script.
+
+See section Editable Instructions for more details.
+
+___________________________________________________________________________________________________________________	
+EDITABLE CODE 
+___________________________________________________________________________________________________________________	
+check below for (relatively) easily editable parameters, stimuli, instructions etc. 
+Keep in mind that you can use this script as a template and therefore always "mess" with the entire code 
+to further customize your experiment.
+
+The parameters you can change are:
+
+/skipIntro:					true = instruction blocks are skipped, instructions are only presented verbally to the child
+							false = instruction blocks are run on the computer (default in this script)
+							Note: original (verbal) instructions can be found under section 'Editable Instructions'
+
+
+/soundfileDelay:		 	the delay (in ms) of the soundfile after presenting the current cupboard image (default: 2000ms)
+/responseTimeout:			response timeout (in ms); measured from onset of soundfile (default: 4500ms)
+
+/soundfileDuration:			the duration of each soundfiles (default: 2200ms)
+							Note: the soundfiles played by this script are all 2200ms long. If different soundfiles are
+							played, this time needs to be adjusted.
+							
+							
+							
+/posttrialpause:			the duration (in ms) at the end of each trial during which the dropped object appears
+							in its new position (default: 500ms)
+							
+/blankITI:					the intertrial interval (in ms) that presents a blank screen in between trials (default: 100ms)
+
+/debug_showoriginalcupboardimages:	 true (1): this setting starts a debugging mode in which the 
+									original cupboard images are presented together with the runtime generated
+									ones in order to compare the two cupboards.
+									This setting also increases the time allowed for a response.
+									
+									false (0): only the runtime generated cupboards are presented.
+									This is the default setting for a testing session.
+							
+							
+</usermanual>
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EDITABLE PARAMETERS: change editable parameters here
+**************************************************************************************************************
+**************************************************************************************************************
+
+<parameters>
+/skipIntro = false
+
+/soundfileDelay = 2000
+/responseTimeout = 4500
+/soundfileDuration = 2200
+
+/posttrialpause = 500
+/blankITI = 100
+
+/debug_showoriginalcupboardimages = false
+</parameters>
+/skipIntro = false
+
+/soundfileDelay = 500
+/responseTimeout = 4500
+/soundfileDuration = 2200
+
+/posttrialpause = 500
+/blankITI = 100
+
+/debug_showoriginalcupboardimages = false
+**************************************************************************************************************
+**************************************************************************************************************
+	EDITABLE STIMULI
+**************************************************************************************************************
+**************************************************************************************************************
+
+
+<include >
+/ precondition = [
+	mod(script.groupid, 6) == 1;
+]
+/ file = "directortask_test1FR.iqx"
+</include>
+
+<include >
+/ precondition = [
+	mod(script.groupid, 6) == 2;
+]
+/ file = "directortask_test2.iqx"
+</include>
+
+<include >
+/ precondition = [
+	mod(script.groupid, 6) == 3;
+]
+/ file = "directortask_test3.iqx"
+</include>
+
+<include >
+/ precondition = [
+	mod(script.groupid, 6) == 4;
+]
+/ file = "directortask_test4.iqx"
+</include>
+
+<include >
+/ precondition = [
+	mod(script.groupid, 6) == 5;
+]
+/ file = "directortask_test5.iqx"
+</include>
+
+<include >
+/ precondition = [
+	mod(script.groupid, 6) == 0;
+]
+/ file = "directortask_test6.iqx"
+</include>
+
+
+***************************************************************
+******************************************************
+	OBJECTS
+	
+Note: this script provides drag/drop of the objects
+in the cupboard. In order to implement the drag/drop
+functionality, each object has to be included as a 
+separate item
+******************************************************
+***************************************************************
+
+
+<item smallcandle>
+/1 = "smallcandle.png"
+</item>
+
+<item mediumcandle>
+/1 = "mediumcandle.png"
+</item>
+
+<item bigcandle>
+/1 = "bigcandle.png"
+</item>
+
+<item bigblock>
+/1 = "bigblock.png"
+</item>
+
+<item mediumblock>
+/1 = "mediumblock.png"
+</item>
+
+<item smallblock>
+/1 = "smallblock.png"
+</item>
+
+<item smallcup>
+/1 = "smallcup.png"
+</item>
+
+<item mediumcup>
+/1 = "mediumcup.png"
+</item>
+
+<item bigcup>
+/1 = "bigcup.png"
+</item>
+
+<item sodacan1>
+/1 = "sodacan1.png"
+</item>
+
+<item sodacan2>
+/1 = "sodacan2.png"
+</item>
+
+<item sodacan3>
+/1 = "sodacan3.png"
+</item>
+
+<item smalljar>
+/1 = "smalljar.png"
+</item>
+
+<item mediumjar>
+/1 = "mediumjar.png"
+</item>
+
+<item bigjar>
+/1 = "bigjar.png"
+</item>
+
+<item holepuncher1>
+/1 = "holepuncher1.png"
+</item>
+
+<item holepuncher2>
+/1 = "holepuncher2.png"
+</item>
+
+<item holepuncher3>
+/1 = "holepuncher3.png"
+</item>
+
+<item golfball>
+/1 = "golfball.png"
+</item>
+
+<item tennisball>
+/1 = "tennisball.png"
+</item>
+
+<item basketball>
+/1 = "basketball.png"
+</item>
+
+<item truck1>
+/1 = "truck1.png"
+</item>
+
+<item truck2>
+/1 = "truck2.png"
+</item>
+
+<item truck3>
+/1 = "truck3.png"
+</item>
+
+<item hairbrush1>
+/1 = "hairbrush1.png"
+</item>
+
+<item hairbrush2>
+/1 = "hairbrush2.png"
+</item>
+
+<item hairbrush3>
+/1 = "hairbrush3.png"
+</item>
+
+<item glasses1>
+/1 = "glasses1.png"
+</item>
+
+<item glasses2>
+/1 = "glasses2.png"
+</item>
+
+<item glasses3>
+/1 = "glasses3.png"
+</item>
+
+<item sock1>
+/1 = "sock1.png"
+</item>
+
+<item sock2>
+/1 = "sock2.png"
+</item>
+
+<item sock3>
+/1 = "sock3.png"
+</item>
+
+<item syringe1>
+/1 = "syringe1.png"
+</item>
+
+<item syringe2>
+/1 = "syringe2.png"
+</item>
+
+<item car1>
+/1 = "car1.png"
+</item>
+
+<item car2>
+/1 = "car2.png"
+</item>
+
+<item car3>
+/1 = "car3.png"
+</item>
+
+<item keys1>
+/1 = "keys1.png"
+</item>
+
+<item keys2>
+/1 = "keys2.png"
+</item>
+
+<item keys3>
+/1 = "keys3.png"
+</item>
+
+<item apple1>
+/1 = "apple1.png"
+</item>
+
+<item apple2>
+/1 = "apple2.png"
+</item>
+
+<item apple3>
+/1 = "apple3.png"
+</item>
+
+<item shoes1>
+/1 = "shoes1.png"
+</item>
+
+<item scissors1>
+/1 = "scissors1.png"
+</item>
+
+<item scissors2>
+/1 = "scissors2.png"
+</item>
+
+<item scissors3>
+/1 = "scissors3.png"
+</item>
+
+<item dice1>
+/1 = "dice1.png"
+</item>
+
+<item dice2>
+/1 = "dice2.png"
+</item>
+
+<item dice3>
+/1 = "dice3.png"
+</item>
+
+<item person>
+/1 = "person.png"
+</item>
+
+<item screwdriver>
+/1 = "screwdriver.png"
+</item>
+
+<item wallet>
+/1 = "wallet.png"
+</item>
+
+<item lipstick>
+/1 = "lipstick.png"
+</item>
+
+<item tape>
+/1 = "tape.png"
+</item>
+
+<item deckofcards>
+/1 = "deckofcards.png"
+</item>
+
+<item apple>
+/1 = "apple.png"
+</item>
+
+<item tie>
+/1 = "tie.png"
+</item>
+
+<item stapler>
+/1 = "stapler.png"
+</item>
+
+<item baby>
+/1 = "baby.png"
+</item>
+
+<item holidaycard>
+/1 = "holidaycard.png"
+</item>
+
+<item rhino>
+/1 = "rhino.png"
+</item>
+
+<item panda>
+/1 = "panda.png"
+</item>
+
+<item airplane>
+/1 = "airplane.png"
+</item>
+
+<item camera>
+/1 = "camera.png"
+</item>
+
+<item pocketknife>
+/1 = "pocketknife.png"
+</item>
+
+<item goose>
+/1 = "goose.png"
+</item>
+
+<item cellphone>
+/1 = "cellphone.png"
+</item>
+
+<item nailpolish>
+/1 = "nailpolish.png"
+</item>
+
+<item pipe>
+/1 = "pipe.png"
+</item>
+
+<item teddy>
+/1 = "teddy.png"
+</item>
+
+<item cow>
+/1 = "cow.png"
+</item>
+
+<item tractor>
+/1 = "tractor.png"
+</item>
+
+<item champagneglasses>
+/1 = "champagneglasses.png"
+</item>
+
+<item spatula>
+/1 = "spatula.png"
+</item>
+
+<item cassette>
+/1 = "cassette.png"
+</item>
+
+<item egg>
+/1 = "egg.png"
+</item>
+
+<item fox>
+/1 = "fox.png"
+</item>
+
+<item gaspump>
+/1 = "gaspump.png"
+</item>
+
+<item pen>
+/1 = "pen.png"
+</item>
+
+<item canopener>
+/1 = "canopener.png"
+</item>
+
+<item mouse>
+/1 = "mouse.png"
+</item>
+
+<item bow>
+/1 = "bow.png"
+</item>
+
+<item grater>
+/1 = "grater.png"
+</item>
+
+<item bikepump>
+/1 = "bikepump.png"
+</item>
+
+<item tiger>
+/1 = "tiger.png"
+</item>
+
+<item watch>
+/1 = "watch.png"
+</item>
+
+<item camerafilm>
+/1 = "camerafilm.png"
+</item>
+
+<item candy>
+/1 = "candy.png"
+</item>
+
+<item banana>
+/1 = "banana.png"
+</item>
+
+<item paintbrush>
+/1 = "paintbrush.png"
+</item>
+
+<picture demoGrid_DP>
+/ items = ("demo.png")
+/ size = (90%, 90%)
+/ erase = false
+</picture>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EDITABLE INSTRUCTIONS: change instructions here
+**************************************************************************************************************
+**************************************************************************************************************
+
+**************************************************************************************************************
+Director Present (DP) - always presented first
+
+NOTE: these instructions can easily be skipped (see parameters.skipIntro) if 
+the intro should be delivered verbally to the participant
+**************************************************************************************************************
+
+<item DP_intro>
+/1 = "Cette expérience étudie la capacité des gens à suivre des instructions sur l'ordinateur."
+/2 = "Voici un exemple de ce que vous allez voir:
+~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+On va vous présentez une grille avec plusieurs objets situés dans les cases.
+
+Un 'directeur', qui se trouve de l'autre côté de la grille, qui vous donnera des instructions sur quel objets déplacer et dans quelle direction. 
+
+Comme vous pouvez le voir, il y a plusieurs cases recouvertes. Vous avez la possibilité de voir les objets qui se situent dans les cases, mais le directeur non."
+/3 = "Voici le point de vue du directeur: 
+~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+Le directeur ne sait pas ce qui se trouve derrière les cases recouvertes, il sera donc important de prendre son point de vue en considération quand vous suivez ses instructions."
+/4 = "~n~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+Par exemple vous pouvez voir la voiture et comme cette cases n'est pas recouverte ..."
+/5 = "~n~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+... le directeur peut également voir la voiture."
+/6 = "~n~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+Prenons un autre exemple. 
+
+Vous voyez la pomme rouge, mais comme la cases est recouvete ..."
+/7 = "~n~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+...le directeur ne peut pas voir la pomme rouge" 
+/8 = "~n~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+Pouvez vous me montrer un autre objet que le directeur ne peut pas voir?"
+/9 = "~n~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+Oui c'est correct <%expressions.dynamicinstructioninsert_DPpart1screen9%>"
+/10 = "~n~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+Maintentant pouvez vous me montrer un objet que le directeur voit?"
+/11 = "~n~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+Oui c'est correct <%expressions.dynamicinstructioninsert_DPpart1screen11%>"
+/12 = "Souvenez vous, quand vous suivez les instructions du directeur, il est important de considérer son point de vue.
+
+Votre tâche est d'écouter les instructions du directeurs et de 'déplacer' l'objet <%expressions.inputdevice_instructions1%> and sliding it to the correct slot. 
+
+Il vous sera toujours demandé de déplacer l'objet d'une case, par exemple d'une case vers la droite, ou vers la gauche."
+/13 = "~n~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+Les instructions donné par le directeur doivent être considéré selon votre point de vue, donc si le directeur vous demande de déplacer les sciseaux vers la gauche par example, vous devez déplacer les sciseaux selon votre gauche, c.-à-d. ce côté. 
+
+Pouvez-vous voir que nous avons écrit gauche et droite sur ces bouts de papiers? C'est pour vous aider.
+
+Faisons une démonstration en déplaçant le vernis d'une case."
+/14 = "~n~n~n~n~n~n~n~n~n~n~n~n~n~n~n
+Pouvez-vous essayer? Que devez vous faire si le directeur demande de 'déplacer la voiture à droite'?"
+</item>
+
+<expressions>
+//the following expressions dynamically change what is presented on screen depending on which response button was pressed during the previous trial
+/dynamicinstructioninsert_DPpart1screen9 = if (trial.DP_intro8.responsetext == "W"){
+	". Le directeur ne peut pas voir la montre.";
+} else if (trial.DP_intro8.responsetext == "C"){
+	". Le directeur ne peut pas voir le téléphone.";
+} else if (trial.DP_intro8.responsetext == "P"){
+	". Le directeur ne peut pas voir la personne.";
+} else {
+	"."
+}
+/dynamicinstructioninsert_DPpart1screen11 = if (trial.DP_intro10.responsetext == "S"){
+	". Le directeur peut voir les sciseaux.";
+} else if (trial.DP_intro10.responsetext == "N"){
+	". Le directeur peut voir le vernis.";
+} else if (trial.DP_intro10.responsetext == "G"){
+	". Le directeur peut voir l'oie.";
+} else {
+	"."
+}
+
+//the following expressions adjust instructions for touchscreens if necessary:
+/inputdevice_instructions1 = if (computer.touch && !computer.haskeyboard){
+	"by touching the object with your finger"
+} else {
+	"by clicking the mouse pointer on the object"
+}
+
+/inputdevice_instructions2 = if (computer.touch && !computer.haskeyboard){
+	"touch"
+} else {
+	"click on"
+}
+/inputdevice_instructions3 = if (computer.touch && !computer.haskeyboard){
+	"your finger"
+} else {
+	"the mouse"
+}
+</expressions>
+
+Note:
+here are the original part 1 instructions by Dumontheil et al (2010):
+
+Part 1:
+
+This experiment is investigating people’s ability to follow instructions on the computer. 
+
+Here is an example of what you will see [showing picture example]. You will be presented with a grid with several objects located in the slots.
+The director, who is on the other side of the grid, will give you instructions on which objects to move and where to move them. 
+As you can see, there are several covered slots. You are able to see the objects in these slots, but the director cannot. 
+
+This is how things look for the director [show slide of the array from director’s point of view]. 
+The director does not know what is behind the covered slots, so it will be important to take his point of view into account 
+when you follow his instructions. 
+
+[Go back to the first screen] For example you can see the car, and because this slot is not covered, 
+[Go to the director’s point of view screen], the director can see the car too.
+
+[Go back to the first screen] Let’s do another one. You can see the red apple, but because this slot is covered, 
+[Go to the director’s point of view screen], the director cannot see the apple. 
+
+[Go back to the first screen] Can you show me another object which the director cannot see? [Wait for a response] … 
+Yes that’s right [Go to the director’s point of view screen], the director cannot see the telephone/watch/nail varnish. 
+
+[Go back to the first screen] Now can you show me an object that the director can see? [Wait for a response]…  
+[Go to the director’s point of view screen], yes that’s right the director can see the scissors/person/car/goose.
+
+[Repeat until it seems the child understands].
+
+So remember, when you follow the director’s instructions, it’s important to take his point of view into account.
+
+Your task is to listen to the director’s instructions and then “move” the object by clicking the mouse pointer on the object and sliding it to the correct slot. You will always be asked to move the object by one slot, for example one slot to the right, or one slot to the left. 
+
+The instructions given by the director should be taken from your point of view, [Go back to the first screen] 
+so if the director asks you to move the scissors left for example, you need to move the scissors towards your left, i.e. this side. 
+Can you see we wrote Left and Right on those pieces of paper? It is to help you. 
+
+[Demonstrate example of moving person up].
+
+Can you try? What should do if the directory says “move the car right” ? [Check that the child click and drag the mouse pointer correctly].
+
+You should do this as quickly and as accurately as possible. When you click on them, the objects won’t actually move, but you should act and move the mouse as if they did. 
+
+If for some reason you don’t respond quickly enough the experiment will move on automatically. If that happens, don’t worry – you should just respond to the next instruction and not try to catch up.
+
+
+**************************************************************************************************************
+Director Absent (DA) part 2 (DA condition always runs after DP condition)
+
+NOTE: these instructions can easily be skipped (see parameters.skipIntro) if 
+the intro should be delivered verbally to the participant
+**************************************************************************************************************
+
+<item DA_intro>
+/1 = "Maintenant vous allez faire une autre tâche similaire à la précédente où vous deviez déplacer les objets. Cette fois-ci il n'y aura pas de directeur.
+~n~n~n~n~n~n~n~n~n~n~n~n~n
+Comme vous pouvez le voir, plusieurs des cases ont un fond gris foncé, et la plupart des autres cases ont un fond transparant. Vous entendrez des instructions pour déplacer les objets. ces instructions se réfère aux objets dans les cases transparentes, pas ceux aux objets dans les cases grises.
+Donc vous devez ignorer les objets dans les cases grises. Ce sera important de prendre cela en compte quand vous suivrez les instructions."
+
+/2 = "Pouvez-vous me montrer une case avec un fond foncé?"
+/3 = "Pouvez-vous me montrer une case avec un fond transparent?"
+/4 = "Tout est clair ? 
+Si on vous demande de déplacer le camion du haut vers la droite, que faites-vous?
+~n~n~n~n~n~n~n~n~n~n~n~n~n
+Super, maintenant nous pouvons commencer cette partie de l'étude."
+</item>
+
+
+Note:
+here are the original part 2 instructions by Dumontheil et al (2010):
+
+Second part
+
+Now you are going to do something similar to the task where you were moving objects earlier.
+
+This time the director is not going to be there anymore.
+
+As you can see, several of the slots have dark grey backgrounds, whereas most of them are clear. You are going to hear instructions to move the objects. These instructions only refer to items in the clear slots. They do not refer to objects in the grey slots. 
+
+So you have to ignore the objects in the grey slots. It will be important to take this into account when you follow the instructions. 
+
+Can you show me a slot with a grey background?  [Let them answer] And a slot with a clear background? [Let them answer]
+
+Is it all clear ? [Show the next slide with relational trials]. If I said move the top truck right, what would you do ? [Check they do the correct thing and ignore the truck in the grey background. If not clear, explain again.]
+
+Great, now we’ll start this part of the experiment.
+
+
+**************************************************************************************************************
+Practice and Test Instructions
+**************************************************************************************************************
+
+<item practicetestinstructions>
+/1 = "Maintenant nous faisons une grille d'exercice pratique.
+
+Essayez de le faire le plus vite et le plus précisement possilbe.
+ 
+Si vous n'arrivez pas à répondre assez vite à l'essaie, cela passera automatiquement à l'essaie suivant. Si cela arrive, pas de problème - vous devez simplement répondre à l'instruction suivante sans essayé de rattraper répondre à la précédente.
+
+Appuyez sur la barre d'espace pour commencez l'exercice"
+/2 = "C'est la fin de l'exercice pratique.
+
+Maintenant nous passons à l'étude avec 16 grilles.
+Veuillez écoutez attentivement les instructions, et ensuite répondez l plus rapidement et précisement possible.
+
+Appuyez sur la barre d'espace pour commencer."
+</item>
+
+
+**************************************************************************************************************
+Finish Instructions
+**************************************************************************************************************
+
+<text finish>
+/ items = ("Merci Beaucoup!")
+/ fontstyle = ("Arial", 8%, true, false, false, false, 5, 1)
+/ position = (50%, 50%)
+/ size = (80%, 10%)
+/ vjustify = center
+/ valign = center
+/ halign = center
+</text>
+
+<button exitbutton>
+/ caption = "Échap"
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ position = (50%, 80%)
+/ size = (20%, 5%)
+/ valign = center
+/ halign = center
+</button>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EDITABLE LISTS: change editable lists here
+**************************************************************************************************************
+**************************************************************************************************************
+
+**************************************************************************************************************
+				!!!REMAINING CODE: Customize after careful consideration only!!!
+**************************************************************************************************************
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	DEFAULTS
+**************************************************************************************************************
+**************************************************************************************************************
+script requires Inquisit 6.0.2.0 or higher
+
+<defaults>
+/canvasaspectratio = (4,3)
+/minimumversion = "6.0.2.0"
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/txbgcolor = white
+/ txcolor = black
+/ screencolor = white
+</defaults>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	DATA
+**************************************************************************************************************
+**************************************************************************************************************
+
+Note: data file explanations under User Manual Information at the top
+
+To change from one data file per participant to one data file for all participants, set
+/separatefiles = false
+
+***********************
+raw data file
+***********************
+<data>
+/ columns = (build, computer.platform, date, time, subject, group, session, 
+blockcode, blocknum, trialcode, trialnum, 
+
+values.setOrder_DP,
+values.setOrder_DA,
+values.test,
+
+values.condition,
+values.set,
+values.actualSet,
+values.trialtype,
+values.setitemnumber,
+values.taskInstructions,
+values.image, values.presentedGrid,
+values.soundfile,
+values.correctAnswer1,
+values.wrongAnswer,
+values.correctAnswer2,
+values.blocktype,
+values.position,
+
+values.answer1, values.correct1, values.foilSelected, values.answer1RT,
+values.answer2, values.correct2, values.answer2RT,
+values.countWrongAnswers_DP, values.countWrongAnswers_DA,
+values.droppedObject,
+
+response, correct, latency, parameters.debug_showoriginalcupboardimages)
+</data>
+
+***********************
+summary data file
+***********************
+<summarydata>
+/ columns = (inquisit.build, computer.platform, script.startdate, script.starttime, 
+script.subjectid, script.groupid, script.sessionid, 
+script.elapsedtime, script.completed,
+
+expressions.trialcount_exp_DP,
+
+expressions.numberCorrect1_exp_DP
+expressions.PropCorrect1_exp_DP, 
+expressions.numberErrors1_exp_DP, 
+values.countWrongAnswers_DP,
+expressions.meanCorrRT1_exp_DP,
+
+expressions.numberCorrect2_exp_DP,
+expressions.PropCorrect2_exp_DP,
+expressions.meanCorrRT2_exp_DP,
+
+expressions.trialcount_ctrl_DP,
+
+expressions.numberCorrect1_ctrl_DP
+expressions.PropCorrect1_ctrl_DP, 
+expressions.meanCorrRT1_ctrl_DP,
+
+expressions.numberCorrect2_ctrl_DP,
+expressions.PropCorrect2_ctrl_DP,
+expressions.meanCorrRT2_ctrl_DP,
+
+expressions.trialcount_exp_DA,
+
+expressions.numberCorrect1_exp_DA
+expressions.PropCorrect1_exp_DA, 
+expressions.numberErrors1_exp_DA, 
+values.countWrongAnswers_DA,
+expressions.meanCorrRT1_exp_DA,
+
+expressions.numberCorrect2_exp_DA,
+expressions.PropCorrect2_exp_DA,
+expressions.meanCorrRT2_exp_DA,
+
+expressions.trialcount_ctrl_DA,
+
+expressions.numberCorrect1_ctrl_DA
+expressions.PropCorrect1_ctrl_DA, 
+expressions.meanCorrRT1_ctrl_DA,
+
+expressions.numberCorrect2_ctrl_DA,
+expressions.PropCorrect2_ctrl_DA,
+expressions.meanCorrRT2_ctrl_DA)
+
+</summarydata>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	VALUES: automatically updated
+**************************************************************************************************************
+**************************************************************************************************************
+
+<values>
+/setOrder = "" //set order (1-3) of the current trial
+/setOrder_DP = "" //the set order (1-3) the 'Director Present' trials run
+/setOrder_DA = ""//the set order (1-3) the 'Director Absent' trials run
+/test = "" 
+//1 = set order 1
+//2 = set order 2
+//3 = set order 3
+//4 = set order 3
+//5 = set order 2
+//6 = set order 1
+
+/condition = "" //1 = "Director Present"; 2 = "Director Absent"
+
+/set = "" //the set the current trial belongs to (1-16) Note: each set is assigned a specific visual stimulus
+/trialtype = "" //the trialtype of the current trial (filler, control, experimental)
+/setitemnumber = "" //the itemnumber of the current set (1-3) Note: there are three items per set
+/taskInstructions = "" //the presented task instructions in visual format
+/image = "" //the presented image belonging to the current trial
+/soundfile = "" //the presented soundfile (taskinstructions in audio format)
+/correctAnswer1 = "" //the correct location box of the object that should be moved (A-P)
+/correctAnswer2 = "" //the correct location box that the object should be moved TO (A-P)
+/wrongAnswer = "" //the location of the foil object in experimental trials
+/blocktype = "" //1 = block of 3 trials containing a control trial + 2 fillers; 2 = block of 3 trials containing an experimental trial + 2 fillers
+/position = "" //position of the Control or Experimental instruction among the 3 trials associated with each visual stimulus (1-3) Example: position = 1 => the current control/exp trial is run as the first trial with the current visual stimulus
+/actualSet = "" //32 image sets used
+
+/index = 1 //helper variable that stores the itemnumber (1-48) of the currently presented trial
+
+/answer1 = "" // the original location box of the object that was moved (A-P)
+/answer2 = "" //the location box that participant moved the object TO (A-P)
+/correct1 = "" //correctness of answer1 (1 = correct; 0 = otherwise)
+/correct2 = "" //correctness of answer2 (1 = correct; 0 = otherwise)
+/answer1RT = "" //stores the latency of answer1 (the selection of the moved object; measured from onset of soundfile)
+/answer2RT = "" //stores the latency of answer2 (the drop latency of the moved object; measured from onset of soundfile)
+
+/countWrongAnswers_DP = 0 //counts the number of answer1 in experimental DP trials that are the dedicated 'wrong' answers
+/countWrongAnswers_DA = 0 //counts the number of answer1 in experimental DA trials that are the dedicated 'wrong' answers
+
+/presentedGrid = ""
+
+/droppedObject = "" //stores the object that was dropped into a different cubby
+/object1Location = "" //stores the dedicated (original) cubby location of object1
+/object2Location = ""
+/object3Location = ""
+/object4Location = ""
+/object5Location = ""
+/object6Location = ""
+/object7Location = ""
+/object8Location = ""
+
+/debugTimeOutCorrection = 0 //an additional amount of time that is added to the response timeout if the script is run in debugmode
+/foilSelected = 0 //1 = wrong (foil) answer in an experimental trial; 0 = in any other case
+</values>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EXPRESSIONS
+**************************************************************************************************************
+**************************************************************************************************************
+
+<expressions>
+
+//uses the last mouse coordinates in a trial to determine which response box these coordinates fall into:
+//OBSOLETE!!!
+/determineResponseBox = {
+	if ((mouse.x >= display.getpixelsx(shape.A.hposition) && mouse.x <= (display.getpixelsx(shape.A.hposition) + shape.A.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.A.vposition)  &&  mouse.y <= (display.getpixelsy(shape.A.vposition) + shape.A.heightpx))){
+			"A";
+	} else if ((mouse.x >= display.getpixelsx(shape.B.hposition) && mouse.x <= (display.getpixelsx(shape.B.hposition) + shape.B.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.B.vposition)  &&  mouse.y <= (display.getpixelsy(shape.B.vposition) + shape.B.heightpx))){
+			"B";
+	} else if ((mouse.x >= display.getpixelsx(shape.C.hposition) && mouse.x <= (display.getpixelsx(shape.C.hposition) + shape.C.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.C.vposition)  &&  mouse.y <= (display.getpixelsy(shape.C.vposition) + shape.C.heightpx))){
+			"C";
+	} else if ((mouse.x >= display.getpixelsx(shape.D.hposition) && mouse.x <= (display.getpixelsx(shape.D.hposition) + shape.D.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.B.vposition)  &&  mouse.y <= (display.getpixelsy(shape.D.vposition) + shape.D.heightpx))){
+			"D";
+	} else if ((mouse.x >= display.getpixelsx(shape.E.hposition) && mouse.x <= (display.getpixelsx(shape.E.hposition) + shape.E.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.E.vposition)  &&  mouse.y <= (display.getpixelsy(shape.E.vposition) + shape.E.heightpx))){
+			"E";
+	} else if ((mouse.x >= display.getpixelsx(shape.F.hposition) && mouse.x <= (display.getpixelsx(shape.F.hposition) + shape.F.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.F.vposition)  &&  mouse.y <= (display.getpixelsy(shape.F.vposition) + shape.F.heightpx))){
+			"F";
+	} else if ((mouse.x >= display.getpixelsx(shape.G.hposition) && mouse.x <= (display.getpixelsx(shape.G.hposition) + shape.G.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.G.vposition)  &&  mouse.y <= (display.getpixelsy(shape.G.vposition) + shape.G.heightpx))){
+			"G";
+	} else if ((mouse.x >= display.getpixelsx(shape.H.hposition) && mouse.x <= (display.getpixelsx(shape.H.hposition) + shape.H.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.H.vposition)  &&  mouse.y <= (display.getpixelsy(shape.H.vposition) + shape.H.heightpx))){
+			"H";
+	} else if ((mouse.x >= display.getpixelsx(shape.I.hposition) && mouse.x <= (display.getpixelsx(shape.I.hposition) + shape.I.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.I.vposition)  &&  mouse.y <= (display.getpixelsy(shape.I.vposition) + shape.I.heightpx))){
+			"I";
+	} else if ((mouse.x >= display.getpixelsx(shape.J.hposition) && mouse.x <= (display.getpixelsx(shape.J.hposition) + shape.J.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.J.vposition)  &&  mouse.y <= (display.getpixelsy(shape.J.vposition) + shape.J.heightpx))){
+			"J";
+	} else if ((mouse.x >= display.getpixelsx(shape.K.hposition) && mouse.x <= (display.getpixelsx(shape.K.hposition) + shape.K.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.K.vposition)  &&  mouse.y <= (display.getpixelsy(shape.K.vposition) + shape.K.heightpx))){
+			"K";
+	} else if ((mouse.x >= display.getpixelsx(shape.L.hposition) && mouse.x <= (display.getpixelsx(shape.L.hposition) + shape.L.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.L.vposition)  &&  mouse.y <= (display.getpixelsy(shape.L.vposition) + shape.L.heightpx))){
+			"L";
+	} else if ((mouse.x >= display.getpixelsx(shape.M.hposition) && mouse.x <= (display.getpixelsx(shape.M.hposition) + shape.M.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.M.vposition)  &&  mouse.y <= (display.getpixelsy(shape.M.vposition) + shape.M.heightpx))){
+			"M";
+	} else if ((mouse.x >= display.getpixelsx(shape.N.hposition) && mouse.x <= (display.getpixelsx(shape.N.hposition) + shape.N.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.N.vposition)  &&  mouse.y <= (display.getpixelsy(shape.N.vposition) + shape.N.heightpx))){
+			"N";
+	} else if ((mouse.x >= display.getpixelsx(shape.O.hposition) && mouse.x <= (display.getpixelsx(shape.O.hposition) + shape.O.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.O.vposition)  &&  mouse.y <= (display.getpixelsy(shape.O.vposition) + shape.O.heightpx))){
+			"O";
+	} else if ((mouse.x >= display.getpixelsx(shape.P.hposition) && mouse.x <= (display.getpixelsx(shape.P.hposition) + shape.P.widthpx)) &&
+		(mouse.y >= display.getpixelsy(shape.P.vposition)  &&  mouse.y <= (display.getpixelsy(shape.P.vposition) + shape.P.heightpx))){
+			"P";
+	} else {
+		"elsewhere";
+	}
+}
+
+/determineCorrectAnswer2 = {
+
+	//check what box contains the correct Answer for the first correct response (answer1)
+	//then check what words ('left', 'right', 'up', 'down') the task instructions contain
+	//based on instructions and correctresponse for selecting the object determine the correct response for answer2
+	if (values.correctAnswer1 == "A"){
+		if (contains(values.taskInstructions, "left")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "right")){
+			"B";
+		} else if (contains(values.taskInstructions, "up")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "down")){
+			"E";
+		};
+	} else if (values.correctAnswer1 == "B"){
+		if (contains(values.taskInstructions, "left")){
+			"A";
+		} else if (contains(values.taskInstructions, "right")){
+			"C";
+		} else if (contains(values.taskInstructions, "up")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "down")){
+			"F";
+		};
+	} else if (values.correctAnswer1 == "C"){
+		if (contains(values.taskInstructions, "left")){
+			"B";
+		} else if (contains(values.taskInstructions, "right")){
+			"D";
+		} else if (contains(values.taskInstructions, "up")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "down")){
+			"G";
+		};
+	}  else if (values.correctAnswer1 == "D"){
+		if (contains(values.taskInstructions, "left")){
+			"C";
+		} else if (contains(values.taskInstructions, "right")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "up")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "down")){
+			"H";
+		};
+	} else if (values.correctAnswer1 == "E"){
+		if (contains(values.taskInstructions, "left")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "right")){
+			"F";
+		} else if (contains(values.taskInstructions, "up")){
+			"A";
+		} else if (contains(values.taskInstructions, "down")){
+			"I";
+		};
+	} else if (values.correctAnswer1 == "F"){
+		if (contains(values.taskInstructions, "left")){
+			"E";
+		} else if (contains(values.taskInstructions, "right")){
+			"G";
+		} else if (contains(values.taskInstructions, "up")){
+			"B";
+		} else if (contains(values.taskInstructions, "down")){
+			"J";
+		};
+	} else if (values.correctAnswer1 == "G"){
+		if (contains(values.taskInstructions, "left")){
+			"F";
+		} else if (contains(values.taskInstructions, "right")){
+			"H";
+		} else if (contains(values.taskInstructions, "up")){
+			"C";
+		} else if (contains(values.taskInstructions, "down")){
+			"K";
+		};
+	}  else if (values.correctAnswer1 == "H"){
+		if (contains(values.taskInstructions, "left")){
+			"G";
+		} else if (contains(values.taskInstructions, "right")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "up")){
+			"D";
+		} else if (contains(values.taskInstructions, "down")){
+			"L";
+		};
+	} else if (values.correctAnswer1 == "I"){
+		if (contains(values.taskInstructions, "left")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "right")){
+			"J";
+		} else if (contains(values.taskInstructions, "up")){
+			"E";
+		} else if (contains(values.taskInstructions, "down")){
+			"M";
+		};
+	} else if (values.correctAnswer1 == "J"){
+		if (contains(values.taskInstructions, "left")){
+			"I";
+		} else if (contains(values.taskInstructions, "right")){
+			"K";
+		} else if (contains(values.taskInstructions, "up")){
+			"F";
+		} else if (contains(values.taskInstructions, "down")){
+			"N";
+		};
+	} else if (values.correctAnswer1 == "K"){
+		if (contains(values.taskInstructions, "left")){
+			"J";
+		} else if (contains(values.taskInstructions, "right")){
+			"L";
+		} else if (contains(values.taskInstructions, "up")){
+			"G";
+		} else if (contains(values.taskInstructions, "down")){
+			"O";
+		};
+	}  else if (values.correctAnswer1 == "L"){
+		if (contains(values.taskInstructions, "left")){
+			"K";
+		} else if (contains(values.taskInstructions, "right")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "up")){
+			"H";
+		} else if (contains(values.taskInstructions, "down")){
+			"P";
+		};
+	} else if (values.correctAnswer1 == "M"){
+		if (contains(values.taskInstructions, "left")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "right")){
+			"N";
+		} else if (contains(values.taskInstructions, "up")){
+			"I";
+		} else if (contains(values.taskInstructions, "down")){
+			"should not happen";
+		};
+	} else if (values.correctAnswer1 == "N"){
+		if (contains(values.taskInstructions, "left")){
+			"M";
+		} else if (contains(values.taskInstructions, "right")){
+			"O";
+		} else if (contains(values.taskInstructions, "up")){
+			"J";
+		} else if (contains(values.taskInstructions, "down")){
+			"should not happen";
+		};
+	} else if (values.correctAnswer1 == "O"){
+		if (contains(values.taskInstructions, "left")){
+			"N";
+		} else if (contains(values.taskInstructions, "right")){
+			"P";
+		} else if (contains(values.taskInstructions, "up")){
+			"K";
+		} else if (contains(values.taskInstructions, "down")){
+			"should not happen";
+		};
+	}  else if (values.correctAnswer1 == "P"){
+		if (contains(values.taskInstructions, "left")){
+			"O";
+		} else if (contains(values.taskInstructions, "right")){
+			"should not happen";
+		} else if (contains(values.taskInstructions, "up")){
+			"L";
+		} else if (contains(values.taskInstructions, "down")){
+			"should not happen";
+		};
+	};
+
+}
+
+//each of the 32 sets ("cupboard images") are associated with 8 specific objects in the cupboard (4x4 matrix)
+//each object has a specific cupboard location (A-P)
+/determineObjectsForCurrentSet = {//needs to be done for each of the 32 sets!
+	//ensure that the objects are empty (aka reset to theri original empty status)
+	item.object1.reset();
+	item.object2.reset();
+	item.object3.reset();
+	item.object4.reset();	
+	item.object5.reset();	
+	item.object6.reset();
+	item.object7.reset();	
+	item.object8.reset();
+
+	if (values.actualset == "p1"){//add the 8 objects to DP practice set1 (p1)
+		//object1 for DP practice set 1: screwdriver in position B
+		item.object1.appenditem("<%item.screwdriver.item(1)%>");
+		picture.object1.hposition = shape.B.hposition;
+		picture.object1.vposition = shape.B.vposition;
+		values.object1Location = "B";
+		//object2 for practice set 1: sock1 in position D
+		item.object2.appenditem("<%item.sock1.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for practice set 1: egg in position F
+		item.object3.appenditem("<%item.egg.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for practice set 1: spatula in position K
+		item.object4.appenditem("<%item.spatula.item(1)%>");
+		picture.object4.hposition = shape.K.hposition;
+		picture.object4.vposition = shape.K.vposition;
+		values.object4Location = "K";
+		//object5 for practice set 1: cards in position L
+		item.object5.appenditem("<%item.deckofcards.item(1)%>");
+		picture.object5.hposition = shape.L.hposition;
+		picture.object5.vposition = shape.L.vposition;	
+		values.object5Location = "L";
+		//object6 for practice set 1: baby in position M
+		item.object6.appenditem("<%item.baby.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for practice set 1: wallet in position N
+		item.object7.appenditem("<%item.wallet.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for practice set 1: pen in position P
+		item.object8.appenditem("<%item.pen.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == "p2"){//add the 8 objects to DP practice set2 (p2)
+		//object1 for practice set 2: person in position A
+		item.object1.appenditem("<%item.person.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for practice set 2: scissors3 in position C
+		item.object2.appenditem("<%item.scissors3.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for practice set 2: phone in position E
+		item.object3.appenditem("<%item.phone.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for practice set 2: car1 in position H
+		item.object4.appenditem("<%item.car1.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for practice set 2: screwdriver in position J
+		item.object5.appenditem("<%item.screwdriver.item(1)%>");
+		picture.object5.hposition = shape.J.hposition;
+		picture.object5.vposition = shape.J.vposition;	
+		values.object5Location = "J";
+		//object6 for practice set 2: nail polish in position L
+		item.object6.appenditem("<%item.nailpolish.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for practice set 2: baby in position N
+		item.object7.appenditem("<%item.baby.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for practice set 2: spatula in position P
+		item.object8.appenditem("<%item.spatula.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == "np1"){//add the 8 objects to DA practice set1 (np1)
+		//object1 for DA practice set 1: mediumcandle in position A
+		item.object1.appenditem("<%item.mediumcandle.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for practice set 1: sock1 in position D
+		item.object2.appenditem("<%item.sock1.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for practice set 1: screwdriver in position E
+		item.object3.appenditem("<%item.screwdriver.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for practice set 1: car3 in position G
+		item.object4.appenditem("<%item.car3.item(1)%>");
+		picture.object4.hposition = shape.G.hposition;
+		picture.object4.vposition = shape.G.vposition;
+		values.object4Location = "G";
+		//object5 for practice set 1: pen in position J
+		item.object5.appenditem("<%item.pen.item(1)%>");
+		picture.object5.hposition = shape.J.hposition;
+		picture.object5.vposition = shape.J.vposition;	
+		values.object5Location = "J";
+		//object6 for practice set 1: spatula in position K
+		item.object6.appenditem("<%item.spatula.item(1)%>");
+		picture.object6.hposition = shape.K.hposition;
+		picture.object6.vposition = shape.K.vposition;
+		values.object6Location = "K";
+		//object7 for practice set 1: cards in position L
+		item.object7.appenditem("<%item.deckofcards.item(1)%>");
+		picture.object7.hposition = shape.L.hposition;
+		picture.object7.vposition = shape.L.vposition;
+		values.object7Location = "L";
+		//object8 for practice set 1: scissors2 in position M
+		item.object8.appenditem("<%item.scissors2.item(1)%>");
+		picture.object8.hposition = shape.M.hposition;
+		picture.object8.vposition = shape.M.vposition;	
+		values.object8Location = "M";
+	} else if (values.actualset == "np2"){//add the 8 objects to DA practice set2 (np2)
+		//object1 for DA practice set 2: holiday card in position A
+		item.object1.appenditem("<%item.holidaycard.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for practice set 2: pipe in position B
+		item.object2.appenditem("<%item.pipe.item(1)%>");
+		picture.object2.hposition = shape.B.hposition;
+		picture.object2.vposition = shape.B.vposition;
+		values.object2Location = "B";
+		//object3 for practice set 2: nailpolish in position C
+		item.object3.appenditem("<%item.nailpolish.item(1)%>");
+		picture.object3.hposition = shape.C.hposition;
+		picture.object3.vposition = shape.C.vposition;
+		values.object3Location = "C";
+		//object4 for practice set 2: phone in position E
+		item.object4.appenditem("<%item.phone.item(1)%>");
+		picture.object4.hposition = shape.E.hposition;
+		picture.object4.vposition = shape.E.vposition;
+		values.object4Location = "E";
+		//object5 for practice set 2: golfball in position G
+		item.object5.appenditem("<%item.golfball.item(1)%>");
+		picture.object5.hposition = shape.G.hposition;
+		picture.object5.vposition = shape.G.vposition;	
+		values.object5Location = "G";
+		//object6 for practice set 2: car1 in position H
+		item.object6.appenditem("<%item.car1.item(1)%>");
+		picture.object6.hposition = shape.H.hposition;
+		picture.object6.vposition = shape.H.vposition;
+		values.object6Location = "H";
+		//object7 for practice set 2: deckofcards in position N
+		item.object7.appenditem("<%item.deckofcards.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for practice set 2: egg in position O
+		item.object8.appenditem("<%item.egg.item(1)%>");
+		picture.object8.hposition = shape.O.hposition;
+		picture.object8.vposition = shape.O.vposition;	
+		values.object8Location = "O";
+	} else if (values.actualset == 1){//add the 8 objects to set1 (set1_ig1ac)
+		//object1 for Set 1: screwdriver in position A
+		item.object1.appenditem("<%item.screwdriver.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 1: big toy block in position C
+		item.object2.appenditem("<%item.bigblock.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 1: wallet in position F
+		item.object3.appenditem("<%item.wallet.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for Set 1: person in position H
+		item.object4.appenditem("<%item.person.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for Set 1: medium candle in position I
+		item.object5.appenditem("<%item.mediumcandle.item(1)%>");
+		picture.object5.hposition = shape.I.hposition;
+		picture.object5.vposition = shape.I.vposition;	
+		values.object5Location = "I";
+		//object6 for Set 1: small toy block in position K
+		item.object6.appenditem("<%item.smallblock.item(1)%>");
+		picture.object6.hposition = shape.K.hposition;
+		picture.object6.vposition = shape.K.vposition;
+		values.object6Location = "K";
+		//object7 for Set 1: lipstick in position N
+		item.object7.appenditem("<%item.lipstick.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 1: tape in position P
+		item.object8.appenditem("<%item.tape.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 2){//add the 8 objects to set2 (set2_ig1ae)
+		//object1 for Set 2: screwdriver in position A
+		item.object1.appenditem("<%item.screwdriver.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 2: big toy block in position C
+		item.object2.appenditem("<%item.bigblock.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 2: wallet in position F
+		item.object3.appenditem("<%item.wallet.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for Set 2: person in position H
+		item.object4.appenditem("<%item.person.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for Set 2: medium candle in position I
+		item.object5.appenditem("<%item.mediumcandle.item(1)%>");
+		picture.object5.hposition = shape.I.hposition;
+		picture.object5.vposition = shape.I.vposition;	
+		values.object5Location = "I";
+		//object6 for Set 2: small toy block in position K
+		item.object6.appenditem("<%item.smallblock.item(1)%>");
+		picture.object6.hposition = shape.K.hposition;
+		picture.object6.vposition = shape.K.vposition;
+		values.object6Location = "K";
+		//object7 for Set 2: medium block in position N
+		item.object7.appenditem("<%item.mediumblock.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 2: tape in position P
+		item.object8.appenditem("<%item.tape.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 3){//add the 8 objects to set3 (set3_ig1bc)
+		//object1 for Set 3: paint brush in position B
+		item.object1.appenditem("<%item.paintbrush.item(1)%>");
+		picture.object1.hposition = shape.B.hposition;
+		picture.object1.vposition = shape.B.vposition;
+		values.object1Location = "B";
+		//object2 for Set 3: person in position D
+		item.object2.appenditem("<%item.person.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 3: small cup in position F
+		item.object3.appenditem("<%item.smallcup.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for Set 3: deck of cards in position H
+		item.object4.appenditem("<%item.deckofcards.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for Set 3: apple1 in position J
+		item.object5.appenditem("<%item.apple1.item(1)%>");
+		picture.object5.hposition = shape.J.hposition;
+		picture.object5.vposition = shape.J.vposition;	
+		values.object5Location = "J";
+		//object6 for Set 3: medium cup block in position M
+		item.object6.appenditem("<%item.mediumcup.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for Set 3: tie in position N
+		item.object7.appenditem("<%item.tie.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 3: screwdriver in position P
+		item.object8.appenditem("<%item.screwdriver.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 4){//add the 8 objects to set4 (set4_ig1be)
+		//object1 for Set 4: paint brush in position B
+		item.object1.appenditem("<%item.paintbrush.item(1)%>");
+		picture.object1.hposition = shape.B.hposition;
+		picture.object1.vposition = shape.B.vposition;
+		values.object1Location = "B";
+		//object2 for Set 4: person in position D
+		item.object2.appenditem("<%item.person.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 4: small cup in position F
+		item.object3.appenditem("<%item.smallcup.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for Set 4: deck of cards in position H
+		item.object4.appenditem("<%item.deckofcards.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for Set 4: apple1 in position J
+		item.object5.appenditem("<%item.apple1.item(1)%>");
+		picture.object5.hposition = shape.J.hposition;
+		picture.object5.vposition = shape.J.vposition;	
+		values.object5Location = "J";
+		//object6 for Set 4: medium cup block in position M
+		item.object6.appenditem("<%item.mediumcup.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for Set 4: tie in position N
+		item.object7.appenditem("<%item.tie.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 4: big cup in position P
+		item.object8.appenditem("<%item.bigcup.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 5){//add the 8 objects to set5 (set5_ig2cc)
+		//object1 for Set 5: medium candle in position D
+		item.object1.appenditem("<%item.mediumcandle.item(1)%>");
+		picture.object1.hposition = shape.D.hposition;
+		picture.object1.vposition = shape.D.vposition;
+		values.object1Location = "D";
+		//object2 for Set 5: holiday card in position E
+		item.object2.appenditem("<%item.holidaycard.item(1)%>");
+		picture.object2.hposition = shape.E.hposition;
+		picture.object2.vposition = shape.E.vposition;
+		values.object2Location = "E";
+		//object3 for Set 5: stapler in position F
+		item.object3.appenditem("<%item.stapler.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for Set 5: baby in position J
+		item.object4.appenditem("<%item.baby.item(1)%>");
+		picture.object4.hposition = shape.J.hposition;
+		picture.object4.vposition = shape.J.vposition;
+		values.object4Location = "J";
+		//object5 for Set 5: small block in position K
+		item.object5.appenditem("<%item.smallblock.item(1)%>");
+		picture.object5.hposition = shape.K.hposition;
+		picture.object5.vposition = shape.K.vposition;	
+		values.object5Location = "K";
+		//object6 for Set 5: big candle in position L
+		item.object6.appenditem("<%item.bigcandle.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 5: holepuncher1 in position M
+		item.object7.appenditem("<%item.holepuncher1.item(1)%>");
+		picture.object7.hposition = shape.M.hposition;
+		picture.object7.vposition = shape.M.vposition;
+		values.object7Location = "M";
+		//object8 for Set 5: car1 in position O
+		item.object8.appenditem("<%item.car1.item(1)%>");
+		picture.object8.hposition = shape.O.hposition;
+		picture.object8.vposition = shape.O.vposition;	
+		values.object8Location = "O";
+	} else if (values.actualset == 6){//add the 8 objects to set6 (set6_ig2ce)
+		//object1 for Set 6: medium candle in position D
+		item.object1.appenditem("<%item.mediumcandle.item(1)%>");
+		picture.object1.hposition = shape.D.hposition;
+		picture.object1.vposition = shape.D.vposition;
+		values.object1Location = "D";
+		//object2 for Set 6: small candle in position E
+		item.object2.appenditem("<%item.smallcandle.item(1)%>");
+		picture.object2.hposition = shape.E.hposition;
+		picture.object2.vposition = shape.E.vposition;
+		values.object2Location = "E";
+		//object3 for Set 6: stapler in position F
+		item.object3.appenditem("<%item.stapler.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for Set 6: baby in position J
+		item.object4.appenditem("<%item.baby.item(1)%>");
+		picture.object4.hposition = shape.J.hposition;
+		picture.object4.vposition = shape.J.vposition;
+		values.object4Location = "J";
+		//object5 for Set 6: small block in position K
+		item.object5.appenditem("<%item.smallblock.item(1)%>");
+		picture.object5.hposition = shape.K.hposition;
+		picture.object5.vposition = shape.K.vposition;	
+		values.object5Location = "K";
+		//object6 for Set 6: big candle in position L
+		item.object6.appenditem("<%item.bigcandle.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 6: holepuncher1 in position M
+		item.object7.appenditem("<%item.holepuncher1.item(1)%>");
+		picture.object7.hposition = shape.M.hposition;
+		picture.object7.vposition = shape.M.vposition;
+		values.object7Location = "M";
+		//object8 for Set 6: car1 in position O
+		item.object8.appenditem("<%item.car1.item(1)%>");
+		picture.object8.hposition = shape.O.hposition;
+		picture.object8.vposition = shape.O.vposition;	
+		values.object8Location = "O";
+	} else if (values.actualset == 7){//add the 8 objects to set7 (set7_ig2dc)
+		//object1 for Set 7: stapler in position B
+		item.object1.appenditem("<%item.stapler.item(1)%>");
+		picture.object1.hposition = shape.B.hposition;
+		picture.object1.vposition = shape.B.vposition;
+		values.object1Location = "B";
+		//object2 for Set 7: airplane in position D
+		item.object2.appenditem("<%item.airplane.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 7: soda can3 in position F
+		item.object3.appenditem("<%item.sodacan3.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for Set 7: golfball in position K
+		item.object4.appenditem("<%item.golfball.item(1)%>");
+		picture.object4.hposition = shape.K.hposition;
+		picture.object4.vposition = shape.K.vposition;
+		values.object4Location = "K";
+		//object5 for Set 7: panda in position L
+		item.object5.appenditem("<%item.panda.item(1)%>");
+		picture.object5.hposition = shape.L.hposition;
+		picture.object5.vposition = shape.L.vposition;	
+		values.object5Location = "L";
+		//object6 for Set 7: medium cup in position M
+		item.object6.appenditem("<%item.mediumcup.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for Set 7: rhino in position N
+		item.object7.appenditem("<%item.rhino.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 7: soda can2 in position P
+		item.object8.appenditem("<%item.sodacan2.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 8){//add the 8 objects to set8 (set8_ig2de)
+		//object1 for Set 8: soda can1 in position B
+		item.object1.appenditem("<%item.sodacan1.item(1)%>");
+		picture.object1.hposition = shape.B.hposition;
+		picture.object1.vposition = shape.B.vposition;
+		values.object1Location = "B";
+		//object2 for Set 8: airplane in position D
+		item.object2.appenditem("<%item.airplane.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 8: soda can3 in position F
+		item.object3.appenditem("<%item.sodacan3.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for Set 8: golfball in position K
+		item.object4.appenditem("<%item.golfball.item(1)%>");
+		picture.object4.hposition = shape.K.hposition;
+		picture.object4.vposition = shape.K.vposition;
+		values.object4Location = "K";
+		//object5 for Set 8: panda in position L
+		item.object5.appenditem("<%item.panda.item(1)%>");
+		picture.object5.hposition = shape.L.hposition;
+		picture.object5.vposition = shape.L.vposition;	
+		values.object5Location = "L";
+		//object6 for Set 8: medium cup in position M
+		item.object6.appenditem("<%item.mediumcup.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for Set 8: rhino in position N
+		item.object7.appenditem("<%item.rhino.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 8: soda can2 in position P
+		item.object8.appenditem("<%item.sodacan2.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 9){//add the 8 objects to set9 (set9_ig3ec)
+		//object1 for Set 9: syringe1 in position A
+		item.object1.appenditem("<%item.syringe1.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 9: cell phone in position C
+		item.object2.appenditem("<%item.cellphone.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 9: small jar in position G
+		item.object3.appenditem("<%item.smalljar.item(1)%>");
+		picture.object3.hposition = shape.G.hposition;
+		picture.object3.vposition = shape.G.vposition;
+		values.object3Location = "G";
+		//object4 for Set 9: soda can2 in position H
+		item.object4.appenditem("<%item.sodacan2.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for Set 9: medium jar in position I
+		item.object5.appenditem("<%item.mediumjar.item(1)%>");
+		picture.object5.hposition = shape.I.hposition;
+		picture.object5.vposition = shape.I.vposition;	
+		values.object5Location = "I";
+		//object6 for Set 9: pocket knife in position L
+		item.object6.appenditem("<%item.pocketknife.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 9: camera in position M
+		item.object7.appenditem("<%item.camera.item(1)%>");
+		picture.object7.hposition = shape.M.hposition;
+		picture.object7.vposition = shape.M.vposition;
+		values.object7Location = "M";
+		//object8 for Set 9: goose in position O
+		item.object8.appenditem("<%item.goose.item(1)%>");
+		picture.object8.hposition = shape.O.hposition;
+		picture.object8.vposition = shape.O.vposition;	
+		values.object8Location = "O";
+	} else if (values.actualset == 10){//add the 8 objects to set10 (set10_ig3ee)
+		//object1 for Set 10: syringe1 in position A
+		item.object1.appenditem("<%item.syringe1.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 10: cell phone in position C
+		item.object2.appenditem("<%item.cellphone.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 10: small jar in position G
+		item.object3.appenditem("<%item.smalljar.item(1)%>");
+		picture.object3.hposition = shape.G.hposition;
+		picture.object3.vposition = shape.G.vposition;
+		values.object3Location = "G";
+		//object4 for Set 10: soda can2 in position H
+		item.object4.appenditem("<%item.sodacan2.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for Set 10: medium jar in position I
+		item.object5.appenditem("<%item.mediumjar.item(1)%>");
+		picture.object5.hposition = shape.I.hposition;
+		picture.object5.vposition = shape.I.vposition;	
+		values.object5Location = "I";
+		//object6 for Set 10: pocket knife in position L
+		item.object6.appenditem("<%item.pocketknife.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 10: camera in position M
+		item.object7.appenditem("<%item.camera.item(1)%>");
+		picture.object7.hposition = shape.M.hposition;
+		picture.object7.vposition = shape.M.vposition;
+		values.object7Location = "M";
+		//object8 for Set 10: big jar in position O
+		item.object8.appenditem("<%item.bigjar.item(1)%>");
+		picture.object8.hposition = shape.O.hposition;
+		picture.object8.vposition = shape.O.vposition;	
+		values.object8Location = "O";
+	} else if (values.actualset == 11){//add the 8 objects to set11 (set11_ig3gc)
+		//object1 for Set 11: medium jar in position A
+		item.object1.appenditem("<%item.mediumjar.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 11: hole puncher1 in position D
+		item.object2.appenditem("<%item.holepuncher1.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 11: hole puncher2 in position E
+		item.object3.appenditem("<%item.holepuncher2.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for Set 11: nail polish in position J
+		item.object4.appenditem("<%item.nailpolish.item(1)%>");
+		picture.object4.hposition = shape.J.hposition;
+		picture.object4.vposition = shape.J.vposition;
+		values.object4Location = "J";
+		//object5 for Set 11: keys1 in position L
+		item.object5.appenditem("<%item.keys1.item(1)%>");
+		picture.object5.hposition = shape.L.hposition;
+		picture.object5.vposition = shape.L.vposition;	
+		values.object5Location = "L";
+		//object6 for Set 11: teddy in position M
+		item.object6.appenditem("<%item.teddy.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for Set 11: pipe in position O
+		item.object7.appenditem("<%item.pipe.item(1)%>");
+		picture.object7.hposition = shape.O.hposition;
+		picture.object7.vposition = shape.O.vposition;
+		values.object7Location = "O";
+		//object8 for Set 11: dice1 in position P
+		item.object8.appenditem("<%item.dice1.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 12){//add the 8 objects to set12 (set12_ig3ge)
+		//object1 for Set 12: medium jar in position A
+		item.object1.appenditem("<%item.mediumjar.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 12: hole puncher1 in position D
+		item.object2.appenditem("<%item.holepuncher1.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 12: hole puncher2 in position E
+		item.object3.appenditem("<%item.holepuncher2.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for Set 12: hole puncher3 in position J
+		item.object4.appenditem("<%item.holepuncher3.item(1)%>");
+		picture.object4.hposition = shape.J.hposition;
+		picture.object4.vposition = shape.J.vposition;
+		values.object4Location = "J";
+		//object5 for Set 12: keys1 in position L
+		item.object5.appenditem("<%item.keys1.item(1)%>");
+		picture.object5.hposition = shape.L.hposition;
+		picture.object5.vposition = shape.L.vposition;	
+		values.object5Location = "L";
+		//object6 for Set 12: teddy in position M
+		item.object6.appenditem("<%item.teddy.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for Set 12: pipe in position O
+		item.object7.appenditem("<%item.pipe.item(1)%>");
+		picture.object7.hposition = shape.O.hposition;
+		picture.object7.vposition = shape.O.vposition;
+		values.object7Location = "O";
+		//object8 for Set 12: dice1 in position P
+		item.object8.appenditem("<%item.dice1.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 13){//add the 8 objects to set13 (set13_ig4fc)
+		//object1 for Set 13: tractor in position A
+		item.object1.appenditem("<%item.tractor.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 13: keys1 in position C
+		item.object2.appenditem("<%item.keys1.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 13: airplane in position D
+		item.object3.appenditem("<%item.airplane.item(1)%>");
+		picture.object3.hposition = shape.D.hposition;
+		picture.object3.vposition = shape.D.vposition;
+		values.object3Location = "D";
+		//object4 for Set 13: champagne glasses in position F
+		item.object4.appenditem("<%item.champagneglasses.item(1)%>");
+		picture.object4.hposition = shape.F.hposition;
+		picture.object4.vposition = shape.F.vposition;
+		values.object4Location = "F";
+		//object5 for Set 13: tennis ball in position J
+		item.object5.appenditem("<%item.tennisball.item(1)%>");
+		picture.object5.hposition = shape.J.hposition;
+		picture.object5.vposition = shape.J.vposition;	
+		values.object5Location = "J";
+		//object6 for Set 13: basketball in position M
+		item.object6.appenditem("<%item.basketball.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for Set 13: spatual in position O
+		item.object7.appenditem("<%item.spatula.item(1)%>");
+		picture.object7.hposition = shape.O.hposition;
+		picture.object7.vposition = shape.O.vposition;
+		values.object7Location = "O";
+		//object8 for Set 13: cow in position P
+		item.object8.appenditem("<%item.cow.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 14){//add the 8 objects to set14 (set14_ig4fe)
+		//object1 for Set 14: tractor in position A
+		item.object1.appenditem("<%item.tractor.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 14: keys1 in position C
+		item.object2.appenditem("<%item.keys1.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 14: golfball in position D
+		item.object3.appenditem("<%item.golfball.item(1)%>");
+		picture.object3.hposition = shape.D.hposition;
+		picture.object3.vposition = shape.D.vposition;
+		values.object3Location = "D";
+		//object4 for Set 14: champagne glasses in position F
+		item.object4.appenditem("<%item.champagneglasses.item(1)%>");
+		picture.object4.hposition = shape.F.hposition;
+		picture.object4.vposition = shape.F.vposition;
+		values.object4Location = "F";
+		//object5 for Set 14: tennis ball in position J
+		item.object5.appenditem("<%item.tennisball.item(1)%>");
+		picture.object5.hposition = shape.J.hposition;
+		picture.object5.vposition = shape.J.vposition;	
+		values.object5Location = "J";
+		//object6 for Set 14: basketball in position M
+		item.object6.appenditem("<%item.basketball.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for Set 14: spatual in position O
+		item.object7.appenditem("<%item.spatula.item(1)%>");
+		picture.object7.hposition = shape.O.hposition;
+		picture.object7.vposition = shape.O.vposition;
+		values.object7Location = "O";
+		//object8 for Set 14: cow in position P
+		item.object8.appenditem("<%item.cow.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 15){//add the 8 objects to set15 (set15_ig4hc)
+		//object1 for Set 15: cow in position A
+		item.object1.appenditem("<%item.cow.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 15: cassette in position D
+		item.object2.appenditem("<%item.cassette.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 15: egg in position F
+		item.object3.appenditem("<%item.egg.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for Set 15: fox in position H
+		item.object4.appenditem("<%item.fox.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for Set 15: wallet in position I
+		item.object5.appenditem("<%item.wallet.item(1)%>");
+		picture.object5.hposition = shape.I.hposition;
+		picture.object5.vposition = shape.I.vposition;	
+		values.object5Location = "I";
+		//object6 for Set 15: truck1 in position K
+		item.object6.appenditem("<%item.truck1.item(1)%>");
+		picture.object6.hposition = shape.K.hposition;
+		picture.object6.vposition = shape.K.vposition;
+		values.object6Location = "K";
+		//object7 for Set 15: gaspump in position O
+		item.object7.appenditem("<%item.gaspump.item(1)%>");
+		picture.object7.hposition = shape.O.hposition;
+		picture.object7.vposition = shape.O.vposition;
+		values.object7Location = "O";
+		//object8 for Set 15: truck2 in position P
+		item.object8.appenditem("<%item.truck2.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 16){//add the 8 objects to set16 (set16_ig4he)
+		//object1 for Set 16: cow in position A
+		item.object1.appenditem("<%item.cow.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 16: cassette in position D
+		item.object2.appenditem("<%item.cassette.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 16: truck3 in position F
+		item.object3.appenditem("<%item.truck3.item(1)%>");
+		picture.object3.hposition = shape.F.hposition;
+		picture.object3.vposition = shape.F.vposition;
+		values.object3Location = "F";
+		//object4 for Set 16: fox in position H
+		item.object4.appenditem("<%item.fox.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for Set 16: wallet in position I
+		item.object5.appenditem("<%item.wallet.item(1)%>");
+		picture.object5.hposition = shape.I.hposition;
+		picture.object5.vposition = shape.I.vposition;	
+		values.object5Location = "I";
+		//object6 for Set 16: truck1 in position K
+		item.object6.appenditem("<%item.truck1.item(1)%>");
+		picture.object6.hposition = shape.K.hposition;
+		picture.object6.vposition = shape.K.vposition;
+		values.object6Location = "K";
+		//object7 for Set 16: gaspump in position O
+		item.object7.appenditem("<%item.gaspump.item(1)%>");
+		picture.object7.hposition = shape.O.hposition;
+		picture.object7.vposition = shape.O.vposition;
+		values.object7Location = "O";
+		//object8 for Set 16: truck2 in position P
+		item.object8.appenditem("<%item.truck2.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 17){//add the 8 objects to set17 (set17_ig1ic)
+		//object1 for Set 17: hair brush1 in position A
+		item.object1.appenditem("<%item.hairbrush1.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 17: scissors1 in position B
+		item.object2.appenditem("<%item.scissors1.item(1)%>");
+		picture.object2.hposition = shape.B.hposition;
+		picture.object2.vposition = shape.B.vposition;
+		values.object2Location = "B";
+		//object3 for Set 17: mouse in position D
+		item.object3.appenditem("<%item.mouse.item(1)%>");
+		picture.object3.hposition = shape.D.hposition;
+		picture.object3.vposition = shape.D.vposition;
+		values.object3Location = "D";
+		//object4 for Set 17: bow in position G
+		item.object4.appenditem("<%item.bow.item(1)%>");
+		picture.object4.hposition = shape.G.hposition;
+		picture.object4.vposition = shape.G.vposition;
+		values.object4Location = "G";
+		//object5 for Set 17: canopener in position I
+		item.object5.appenditem("<%item.canopener.item(1)%>");
+		picture.object5.hposition = shape.I.hposition;
+		picture.object5.vposition = shape.I.vposition;	
+		values.object5Location = "I";
+		//object6 for Set 17: broom brush in position K
+		item.object6.appenditem("<%item.hairbrush3.item(1)%>");
+		picture.object6.hposition = shape.K.hposition;
+		picture.object6.vposition = shape.K.vposition;
+		values.object6Location = "K";
+		//object7 for Set 17: fox in position M
+		item.object7.appenditem("<%item.fox.item(1)%>");
+		picture.object7.hposition = shape.M.hposition;
+		picture.object7.vposition = shape.M.vposition;
+		values.object7Location = "M";
+		//object8 for Set 17: rhino in position N
+		item.object8.appenditem("<%item.rhino.item(1)%>");
+		picture.object8.hposition = shape.N.hposition;
+		picture.object8.vposition = shape.N.vposition;	
+		values.object8Location = "N";
+	} else if (values.actualset == 18){//add the 8 objects to set17 (set18_ig1ie)
+		//object1 for Set 18: hair brush1 in position A
+		item.object1.appenditem("<%item.hairbrush1.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 18: scissors1 in position B
+		item.object2.appenditem("<%item.scissors1.item(1)%>");
+		picture.object2.hposition = shape.B.hposition;
+		picture.object2.vposition = shape.B.vposition;
+		values.object2Location = "B";
+		//object3 for Set 18: mouse in position D
+		item.object3.appenditem("<%item.mouse.item(1)%>");
+		picture.object3.hposition = shape.D.hposition;
+		picture.object3.vposition = shape.D.vposition;
+		values.object3Location = "D";
+		//object4 for Set 18: bow in position G
+		item.object4.appenditem("<%item.bow.item(1)%>");
+		picture.object4.hposition = shape.G.hposition;
+		picture.object4.vposition = shape.G.vposition;
+		values.object4Location = "G";
+		//object5 for Set 18: canopener in position I
+		item.object5.appenditem("<%item.canopener.item(1)%>");
+		picture.object5.hposition = shape.I.hposition;
+		picture.object5.vposition = shape.I.vposition;	
+		values.object5Location = "I";
+		//object6 for Set 18: broom brush in position K
+		item.object6.appenditem("<%item.hairbrush3.item(1)%>");
+		picture.object6.hposition = shape.K.hposition;
+		picture.object6.vposition = shape.K.vposition;
+		values.object6Location = "K";
+		//object7 for Set 18: fox in position M
+		item.object7.appenditem("<%item.fox.item(1)%>");
+		picture.object7.hposition = shape.M.hposition;
+		picture.object7.vposition = shape.M.vposition;
+		values.object7Location = "M";
+		//object8 for Set 18: hairbrush2 in position N
+		item.object8.appenditem("<%item.hairbrush2.item(1)%>");
+		picture.object8.hposition = shape.N.hposition;
+		picture.object8.vposition = shape.N.vposition;	
+		values.object8Location = "N";
+	} else if (values.actualset == 19){//add the 8 objects to set19 (set19_ig1jc)
+		//object1 for Set 19: grater in position A
+		item.object1.appenditem("<%item.grater.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 19: glasses1 in position C
+		item.object2.appenditem("<%item.glasses1.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 19: bike pump in position G
+		item.object3.appenditem("<%item.bikepump.item(1)%>");
+		picture.object3.hposition = shape.G.hposition;
+		picture.object3.vposition = shape.G.vposition;
+		values.object3Location = "G";
+		//object4 for Set 19: pocketknife in position I
+		item.object4.appenditem("<%item.pocketknife.item(1)%>");
+		picture.object4.hposition = shape.I.hposition;
+		picture.object4.vposition = shape.I.vposition;
+		values.object4Location = "I";
+		//object5 for Set 19: tiger in position K
+		item.object5.appenditem("<%item.tiger.item(1)%>");
+		picture.object5.hposition = shape.K.hposition;
+		picture.object5.vposition = shape.K.vposition;	
+		values.object5Location = "K";
+		//object6 for Set 19: glasses2 in position L
+		item.object6.appenditem("<%item.glasses2.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 19: truck3 in position N
+		item.object7.appenditem("<%item.truck3.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 19: pen in position P
+		item.object8.appenditem("<%item.pen.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 20){//add the 8 objects to set20 (set20_ig1je)
+		//object1 for Set 20: grater in position A
+		item.object1.appenditem("<%item.grater.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 20: glasses1 in position C
+		item.object2.appenditem("<%item.glasses1.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 20: bike pump in position G
+		item.object3.appenditem("<%item.bikepump.item(1)%>");
+		picture.object3.hposition = shape.G.hposition;
+		picture.object3.vposition = shape.G.vposition;
+		values.object3Location = "G";
+		//object4 for Set 20: pocketknife in position I
+		item.object4.appenditem("<%item.pocketknife.item(1)%>");
+		picture.object4.hposition = shape.I.hposition;
+		picture.object4.vposition = shape.I.vposition;
+		values.object4Location = "I";
+		//object5 for Set 20: tiger in position K
+		item.object5.appenditem("<%item.tiger.item(1)%>");
+		picture.object5.hposition = shape.K.hposition;
+		picture.object5.vposition = shape.K.vposition;	
+		values.object5Location = "K";
+		//object6 for Set 20: glasses2 in position L
+		item.object6.appenditem("<%item.glasses2.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 20: glasses3 in position N
+		item.object7.appenditem("<%item.glasses3.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 20: pen in position P
+		item.object8.appenditem("<%item.pen.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 21){//add the 8 objects to set21 (set21_ig2kc)
+		//object1 for Set 21: wallet in position A
+		item.object1.appenditem("<%item.wallet.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 21: glasses2 in position B
+		item.object2.appenditem("<%item.glasses2.item(1)%>");
+		picture.object2.hposition = shape.B.hposition;
+		picture.object2.vposition = shape.B.vposition;
+		values.object2Location = "B";
+		//object3 for Set 21: camera in position G
+		item.object3.appenditem("<%item.camera.item(1)%>");
+		picture.object3.hposition = shape.D.hposition;
+		picture.object3.vposition = shape.D.vposition;
+		values.object3Location = "D";
+		//object4 for Set 21: sock1 in position F
+		item.object4.appenditem("<%item.sock1.item(1)%>");
+		picture.object4.hposition = shape.F.hposition;
+		picture.object4.vposition = shape.F.vposition;
+		values.object4Location = "F";
+		//object5 for Set 21: watch in position H
+		item.object5.appenditem("<%item.watch.item(1)%>");
+		picture.object5.hposition = shape.H.hposition;
+		picture.object5.vposition = shape.H.vposition;	
+		values.object5Location = "H";
+		//object6 for Set 21: teddy in position K
+		item.object6.appenditem("<%item.teddy.item(1)%>");
+		picture.object6.hposition = shape.K.hposition;
+		picture.object6.vposition = shape.K.vposition;
+		values.object6Location = "K";
+		//object7 for Set 21: medium block in position M
+		item.object7.appenditem("<%item.mediumblock.item(1)%>");
+		picture.object7.hposition = shape.M.hposition;
+		picture.object7.vposition = shape.M.vposition;
+		values.object7Location = "M";
+		//object8 for Set 21: sock2 in position O
+		item.object8.appenditem("<%item.sock2.item(1)%>");
+		picture.object8.hposition = shape.O.hposition;
+		picture.object8.vposition = shape.O.vposition;	
+		values.object8Location = "O";
+	} else if (values.actualset == 22){//add the 8 objects to set22 (set22_ig2ke)
+		//object1 for Set 22: wallet in position A
+		item.object1.appenditem("<%item.wallet.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 22: glasses2 in position B
+		item.object2.appenditem("<%item.glasses2.item(1)%>");
+		picture.object2.hposition = shape.B.hposition;
+		picture.object2.vposition = shape.B.vposition;
+		values.object2Location = "B";
+		//object3 for Set 22: camera in position G
+		item.object3.appenditem("<%item.camera.item(1)%>");
+		picture.object3.hposition = shape.D.hposition;
+		picture.object3.vposition = shape.D.vposition;
+		values.object3Location = "D";
+		//object4 for Set 22: sock1 in position F
+		item.object4.appenditem("<%item.sock1.item(1)%>");
+		picture.object4.hposition = shape.F.hposition;
+		picture.object4.vposition = shape.F.vposition;
+		values.object4Location = "F";
+		//object5 for Set 22: sock3 in position H
+		item.object5.appenditem("<%item.sock3.item(1)%>");
+		picture.object5.hposition = shape.H.hposition;
+		picture.object5.vposition = shape.H.vposition;	
+		values.object5Location = "H";
+		//object6 for Set 22: teddy in position K
+		item.object6.appenditem("<%item.teddy.item(1)%>");
+		picture.object6.hposition = shape.K.hposition;
+		picture.object6.vposition = shape.K.vposition;
+		values.object6Location = "K";
+		//object7 for Set 22: medium block in position M
+		item.object7.appenditem("<%item.mediumblock.item(1)%>");
+		picture.object7.hposition = shape.M.hposition;
+		picture.object7.vposition = shape.M.vposition;
+		values.object7Location = "M";
+		//object8 for Set 22: sock2 in position O
+		item.object8.appenditem("<%item.sock2.item(1)%>");
+		picture.object8.hposition = shape.O.hposition;
+		picture.object8.vposition = shape.O.vposition;	
+		values.object8Location = "O";
+	} else if (values.actualset == 23){//add the 8 objects to set23 (set23_ig2lc)
+		//object1 for Set 23: watch in position B
+		item.object1.appenditem("<%item.watch.item(1)%>");
+		picture.object1.hposition = shape.B.hposition;
+		picture.object1.vposition = shape.B.vposition;
+		values.object1Location = "B";
+		//object2 for Set 23: camerafilm in position D
+		item.object2.appenditem("<%item.camerafilm.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 23: pipe in position E
+		item.object3.appenditem("<%item.pipe.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for Set 23: car2 in position I
+		item.object4.appenditem("<%item.car2.item(1)%>");
+		picture.object4.hposition = shape.I.hposition;
+		picture.object4.vposition = shape.I.vposition;
+		values.object4Location = "I";
+		//object5 for Set 23: syringe2 in position K
+		item.object5.appenditem("<%item.syringe2.item(1)%>");
+		picture.object5.hposition = shape.K.hposition;
+		picture.object5.vposition = shape.K.vposition;	
+		values.object5Location = "K";
+		//object6 for Set 23: hairbrush1 in position M
+		item.object6.appenditem("<%item.hairbrush1.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for Set 23: Car3 in position O
+		item.object7.appenditem("<%item.car3.item(1)%>");
+		picture.object7.hposition = shape.O.hposition;
+		picture.object7.vposition = shape.O.vposition;
+		values.object7Location = "O";
+		//object8 for Set 23: candy in position P
+		item.object8.appenditem("<%item.candy.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 24){//add the 8 objects to set24 (set24_ig2le)
+		//object1 for Set 24: car1 in position B
+		item.object1.appenditem("<%item.car1.item(1)%>");
+		picture.object1.hposition = shape.B.hposition;
+		picture.object1.vposition = shape.B.vposition;
+		values.object1Location = "B";
+		//object2 for Set 24: camerafilm in position D
+		item.object2.appenditem("<%item.camerafilm.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 24: pipe in position E
+		item.object3.appenditem("<%item.pipe.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for Set 24: car2 in position I
+		item.object4.appenditem("<%item.car2.item(1)%>");
+		picture.object4.hposition = shape.I.hposition;
+		picture.object4.vposition = shape.I.vposition;
+		values.object4Location = "I";
+		//object5 for Set 24: syringe2 in position K
+		item.object5.appenditem("<%item.syringe2.item(1)%>");
+		picture.object5.hposition = shape.K.hposition;
+		picture.object5.vposition = shape.K.vposition;	
+		values.object5Location = "K";
+		//object6 for Set 24: hairbrush1 in position M
+		item.object6.appenditem("<%item.hairbrush1.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for Set 24: Car3 in position O
+		item.object7.appenditem("<%item.car3.item(1)%>");
+		picture.object7.hposition = shape.O.hposition;
+		picture.object7.vposition = shape.O.vposition;
+		values.object7Location = "O";
+		//object8 for Set 24: candy in position P
+		item.object8.appenditem("<%item.candy.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 25){//add the 8 objects to set25 (set25_ig3mc)
+		//object1 for Set 25: tiger in position A
+		item.object1.appenditem("<%item.tiger.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 25: tennisball in position C
+		item.object2.appenditem("<%item.tennisball.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 25: holepuncher2 in position E
+		item.object3.appenditem("<%item.holepuncher2.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for Set 25: keys2 in position F
+		item.object4.appenditem("<%item.keys2.item(1)%>");
+		picture.object4.hposition = shape.F.hposition;
+		picture.object4.vposition = shape.F.vposition;
+		values.object4Location = "F";
+		//object5 for Set 25: pipe in position G
+		item.object5.appenditem("<%item.pipe.item(1)%>");
+		picture.object5.hposition = shape.G.hposition;
+		picture.object5.vposition = shape.G.vposition;	
+		values.object5Location = "G";
+		//object6 for Set 25: keys1 in position L
+		item.object6.appenditem("<%item.keys1.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 25: candy in position N
+		item.object7.appenditem("<%item.candy.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 25: camerafilm in position O
+		item.object8.appenditem("<%item.camerafilm.item(1)%>");
+		picture.object8.hposition = shape.O.hposition;
+		picture.object8.vposition = shape.O.vposition;	
+		values.object8Location = "O";
+	} else if (values.actualset == 26){//add the 8 objects to set2e (set26_ig3me)
+		//object1 for Set 26: tiger in position A
+		item.object1.appenditem("<%item.tiger.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 26: tennisball in position C
+		item.object2.appenditem("<%item.tennisball.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 26: holepuncher2 in position E
+		item.object3.appenditem("<%item.holepuncher2.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for Set 26: keys2 in position F
+		item.object4.appenditem("<%item.keys2.item(1)%>");
+		picture.object4.hposition = shape.F.hposition;
+		picture.object4.vposition = shape.F.vposition;
+		values.object4Location = "F";
+		//object5 for Set 26: pipe in position G
+		item.object5.appenditem("<%item.pipe.item(1)%>");
+		picture.object5.hposition = shape.G.hposition;
+		picture.object5.vposition = shape.G.vposition;	
+		values.object5Location = "G";
+		//object6 for Set 26: keys1 in position L
+		item.object6.appenditem("<%item.keys1.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 26: candy in position N
+		item.object7.appenditem("<%item.candy.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 26: keys3 in position O
+		item.object8.appenditem("<%item.keys3.item(1)%>");
+		picture.object8.hposition = shape.O.hposition;
+		picture.object8.vposition = shape.O.vposition;	
+		values.object8Location = "O";
+	} else if (values.actualset == 27){//add the 8 objects to set2e (set27_ig3nc)
+		//object1 for Set 27: apple2 in position B
+		item.object1.appenditem("<%item.apple2.item(1)%>");
+		picture.object1.hposition = shape.B.hposition;
+		picture.object1.vposition = shape.B.vposition;
+		values.object1Location = "B";
+		//object2 for Set 27: grater in position C
+		item.object2.appenditem("<%item.grater.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 27: panda in position E
+		item.object3.appenditem("<%item.panda.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for Set 27: nail polish in position H
+		item.object4.appenditem("<%item.nailpolish.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for Set 27: bigcup in position J
+		item.object5.appenditem("<%item.bigcup.item(1)%>");
+		picture.object5.hposition = shape.J.hposition;
+		picture.object5.vposition = shape.J.vposition;	
+		values.object5Location = "J";
+		//object6 for Set 27: holidaycard in position L
+		item.object6.appenditem("<%item.holidaycard.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 27: tie in position N
+		item.object7.appenditem("<%item.tie.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 27: apple3 in position P
+		item.object8.appenditem("<%item.apple3.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 28){//add the 8 objects to set28 (set28_ig3ne)
+		//object1 for Set 28: apple2 in position B
+		item.object1.appenditem("<%item.apple2.item(1)%>");
+		picture.object1.hposition = shape.B.hposition;
+		picture.object1.vposition = shape.B.vposition;
+		values.object1Location = "B";
+		//object2 for Set 28: grater in position C
+		item.object2.appenditem("<%item.grater.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 28: panda in position E
+		item.object3.appenditem("<%item.panda.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for Set 28: apple1 in position H
+		item.object4.appenditem("<%item.apple1.item(1)%>");
+		picture.object4.hposition = shape.H.hposition;
+		picture.object4.vposition = shape.H.vposition;
+		values.object4Location = "H";
+		//object5 for Set 28: bigcup in position J
+		item.object5.appenditem("<%item.bigcup.item(1)%>");
+		picture.object5.hposition = shape.J.hposition;
+		picture.object5.vposition = shape.J.vposition;	
+		values.object5Location = "J";
+		//object6 for Set 28: holidaycard in position L
+		item.object6.appenditem("<%item.holidaycard.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 28: tie in position N
+		item.object7.appenditem("<%item.tie.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 28: apple3 in position P
+		item.object8.appenditem("<%item.apple3.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 29){//add the 8 objects to set29 (set29_ig4oc)
+		//object1 for Set 29: lipstick in position C
+		item.object1.appenditem("<%item.lipstick.item(1)%>");
+		picture.object1.hposition = shape.C.hposition;
+		picture.object1.vposition = shape.C.vposition;
+		values.object1Location = "C";
+		//object2 for Set 29: shoes1 in position C
+		item.object2.appenditem("<%item.shoes1.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 29: scissors2 in position E
+		item.object3.appenditem("<%item.scissors2.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for Set 29: pen in position I
+		item.object4.appenditem("<%item.pen.item(1)%>");
+		picture.object4.hposition = shape.I.hposition;
+		picture.object4.vposition = shape.I.vposition;
+		values.object4Location = "I";
+		//object5 for Set 29: truck3 in position K
+		item.object5.appenditem("<%item.truck3.item(1)%>");
+		picture.object5.hposition = shape.K.hposition;
+		picture.object5.vposition = shape.K.vposition;	
+		values.object5Location = "K";
+		//object6 for Set 29: bigjar in position L
+		item.object6.appenditem("<%item.bigjar.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 29: glasses1 in position N
+		item.object7.appenditem("<%item.glasses1.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 29: scissors1 in position P
+		item.object8.appenditem("<%item.scissors1.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 30){//add the 8 objects to set30 (set30_ig4oe)
+		//object1 for Set 30: lipstick in position C
+		item.object1.appenditem("<%item.lipstick.item(1)%>");
+		picture.object1.hposition = shape.C.hposition;
+		picture.object1.vposition = shape.C.vposition;
+		values.object1Location = "C";
+		//object2 for Set 30: scissors3 in position C
+		item.object2.appenditem("<%item.scissors3.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for Set 30: scissors2 in position E
+		item.object3.appenditem("<%item.scissors2.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for Set 30: pen in position I
+		item.object4.appenditem("<%item.pen.item(1)%>");
+		picture.object4.hposition = shape.I.hposition;
+		picture.object4.vposition = shape.I.vposition;
+		values.object4Location = "I";
+		//object5 for Set 30: truck3 in position K
+		item.object5.appenditem("<%item.truck3.item(1)%>");
+		picture.object5.hposition = shape.K.hposition;
+		picture.object5.vposition = shape.K.vposition;	
+		values.object5Location = "K";
+		//object6 for Set 30: bigjar in position L
+		item.object6.appenditem("<%item.bigjar.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 30: glasses1 in position N
+		item.object7.appenditem("<%item.glasses1.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for Set 30: scissors1 in position P
+		item.object8.appenditem("<%item.scissors1.item(1)%>");
+		picture.object8.hposition = shape.P.hposition;
+		picture.object8.vposition = shape.P.vposition;	
+		values.object8Location = "P";
+	} else if (values.actualset == 31){//add the 8 objects to set31 (set31_ig4pc)
+		//object1 for Set 31: dice2 in position A
+		item.object1.appenditem("<%item.dice2.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 31: baby in position C
+		item.object2.appenditem("<%item.baby.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 31: sodacan2 in position D
+		item.object3.appenditem("<%item.sodacan2.item(1)%>");
+		picture.object3.hposition = shape.D.hposition;
+		picture.object3.vposition = shape.D.vposition;
+		values.object3Location = "D";
+		//object4 for Set 31: egg in position E
+		item.object4.appenditem("<%item.egg.item(1)%>");
+		picture.object4.hposition = shape.E.hposition;
+		picture.object4.vposition = shape.E.vposition;
+		values.object4Location = "E";
+		//object5 for Set 31: banana in position F
+		item.object5.appenditem("<%item.banana.item(1)%>");
+		picture.object5.hposition = shape.F.hposition;
+		picture.object5.vposition = shape.F.vposition;	
+		values.object5Location = "F";
+		//object6 for Set 31: mouse in position L
+		item.object6.appenditem("<%item.mouse.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 31: dice1 in position M
+		item.object7.appenditem("<%item.dice1.item(1)%>");
+		picture.object7.hposition = shape.M.hposition;
+		picture.object7.vposition = shape.M.vposition;
+		values.object7Location = "M";
+		//object8 for Set 31: bikepump in position N
+		item.object8.appenditem("<%item.bikepump.item(1)%>");
+		picture.object8.hposition = shape.N.hposition;
+		picture.object8.vposition = shape.N.vposition;	
+		values.object8Location = "N";
+	} else if (values.actualset == 32){//add the 8 objects to set32 (set32_ig4pe)
+		//object1 for Set 32: dice2 in position A
+		item.object1.appenditem("<%item.dice2.item(1)%>");
+		picture.object1.hposition = shape.A.hposition;
+		picture.object1.vposition = shape.A.vposition;
+		values.object1Location = "A";
+		//object2 for Set 32: baby in position C
+		item.object2.appenditem("<%item.baby.item(1)%>");
+		picture.object2.hposition = shape.C.hposition;
+		picture.object2.vposition = shape.C.vposition;
+		values.object2Location = "C";
+		//object3 for Set 32: sodacan2 in position D
+		item.object3.appenditem("<%item.sodacan2.item(1)%>");
+		picture.object3.hposition = shape.D.hposition;
+		picture.object3.vposition = shape.D.vposition;
+		values.object3Location = "D";
+		//object4 for Set 32: egg in position E
+		item.object4.appenditem("<%item.egg.item(1)%>");
+		picture.object4.hposition = shape.E.hposition;
+		picture.object4.vposition = shape.E.vposition;
+		values.object4Location = "E";
+		//object5 for Set 32: banana in position F
+		item.object5.appenditem("<%item.banana.item(1)%>");
+		picture.object5.hposition = shape.F.hposition;
+		picture.object5.vposition = shape.F.vposition;	
+		values.object5Location = "F";
+		//object6 for Set 32: dice3 in position L
+		item.object6.appenditem("<%item.dice3.item(1)%>");
+		picture.object6.hposition = shape.L.hposition;
+		picture.object6.vposition = shape.L.vposition;
+		values.object6Location = "L";
+		//object7 for Set 32: dice1 in position M
+		item.object7.appenditem("<%item.dice1.item(1)%>");
+		picture.object7.hposition = shape.M.hposition;
+		picture.object7.vposition = shape.M.vposition;
+		values.object7Location = "M";
+		//object8 for Set 32: bikepump in position N
+		item.object8.appenditem("<%item.bikepump.item(1)%>");
+		picture.object8.hposition = shape.N.hposition;
+		picture.object8.vposition = shape.N.vposition;	
+		values.object8Location = "N";
+	} else if (values.actualSet == "demo"){
+		//object1 for move demo: scissors3 in position C
+		item.object1.appenditem("<%item.scissors3.item(1)%>");
+		picture.object1.hposition = shape.C.hposition;
+		picture.object1.vposition = shape.C.vposition;
+		values.object1Location = "C";
+		//object2 for move demo: watch in position D
+		item.object2.appenditem("<%item.watch.item(1)%>");
+		picture.object2.hposition = shape.D.hposition;
+		picture.object2.vposition = shape.D.vposition;
+		values.object2Location = "D";
+		//object3 for move demo: nail polish in position E
+		item.object3.appenditem("<%item.nailpolish.item(1)%>");
+		picture.object3.hposition = shape.E.hposition;
+		picture.object3.vposition = shape.E.vposition;
+		values.object3Location = "E";
+		//object4 for move demo: apple1 in position F
+		item.object4.appenditem("<%item.apple1.item(1)%>");
+		picture.object4.hposition = shape.F.hposition;
+		picture.object4.vposition = shape.F.vposition;
+		values.object4Location = "F";
+		//object5 for move demo: person in position L
+		item.object5.appenditem("<%item.person.item(1)%>");
+		picture.object5.hposition = shape.L.hposition;
+		picture.object5.vposition = shape.L.vposition;	
+		values.object5Location = "L";
+		//object6 for move demo: car1 in position M
+		item.object6.appenditem("<%item.car1.item(1)%>");
+		picture.object6.hposition = shape.M.hposition;
+		picture.object6.vposition = shape.M.vposition;
+		values.object6Location = "M";
+		//object7 for move demo: goose in position N
+		item.object7.appenditem("<%item.goose.item(1)%>");
+		picture.object7.hposition = shape.N.hposition;
+		picture.object7.vposition = shape.N.vposition;
+		values.object7Location = "N";
+		//object8 for move demo: cellphone in position O
+		item.object8.appenditem("<%item.cellphone.item(1)%>");
+		picture.object8.hposition = shape.O.hposition;
+		picture.object8.vposition = shape.O.vposition;	
+		values.object8Location = "O";		
+	};
+}
+</expressions>
+
+
+//summaryvariables:
+<expressions>
+/trialcount_exp_DP = list.ACC1_experimental_DP.itemcount
+
+/numberCorrect1_exp_DP = list.ACC1_experimental_DP.mean*list.ACC1_experimental_DP.itemcount
+/PropCorrect1_exp_DP = list.ACC1_experimental_DP.mean
+/numberErrors1_exp_DP = list.ACC1_experimental_DP.itemcount - (list.ACC1_experimental_DP.mean*list.ACC1_experimental_DP.itemcount)
+/meanCorrRT1_exp_DP = list.RT1_experimental_DP.mean
+
+/numberCorrect2_exp_DP = list.ACC2_experimental_DP.mean*list.ACC2_experimental_DP.itemcount
+/PropCorrect2_exp_DP = list.ACC2_experimental_DP.mean
+/meanCorrRT2_exp_DP = list.RT2_experimental_DP.mean
+
+/trialcount_ctrl_DP = list.ACC1_control_DP.itemcount
+
+/numberCorrect1_ctrl_DP = list.ACC1_control_DP.mean*list.ACC1_control_DP.itemcount
+/PropCorrect1_ctrl_DP = list.ACC1_control_DP.mean
+/meanCorrRT1_ctrl_DP = list.RT1_control_DP.mean
+
+/numberCorrect2_ctrl_DP = list.ACC2_control_DP.mean*list.ACC2_control_DP.itemcount
+/PropCorrect2_ctrl_DP = list.ACC2_control_DP.mean
+/meanCorrRT2_ctrl_DP = list.RT2_control_DP.mean
+
+/trialcount_exp_DA = list.ACC1_experimental_DA.itemcount
+
+/numberCorrect1_exp_DA = list.ACC1_experimental_DA.mean*list.ACC1_experimental_DA.itemcount
+/PropCorrect1_exp_DA = list.ACC1_experimental_DA.mean
+/numberErrors1_exp_DA = list.ACC1_experimental_DA.itemcount - (list.ACC1_experimental_DA.mean*list.ACC1_experimental_DA.itemcount)
+/meanCorrRT1_exp_DA = list.RT1_experimental_DA.mean
+
+/numberCorrect2_exp_DA = list.ACC2_experimental_DA.mean*list.ACC2_experimental_DA.itemcount
+/PropCorrect2_exp_DA = list.ACC2_experimental_DA.mean
+/meanCorrRT2_exp_DA = list.RT2_experimental_DA.mean
+
+/trialcount_ctrl_DA = list.ACC1_control_DA.itemcount
+
+/numberCorrect1_ctrl_DA = list.ACC1_control_DA.mean*list.ACC1_control_DA.itemcount
+/PropCorrect1_ctrl_DA = list.ACC1_control_DA.mean
+/meanCorrRT1_ctrl_DA = list.RT1_control_DA.mean
+
+/numberCorrect2_ctrl_DA = list.ACC2_control_DA.mean*list.ACC2_control_DA.itemcount
+/PropCorrect2_ctrl_DA = list.ACC2_control_DA.mean
+/meanCorrRT2_ctrl_DA = list.RT2_control_DA.mean
+</expressions>
+
+
+
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	INSTRUCTIONS
+**************************************************************************************************************
+**************************************************************************************************************
+
+*************************************************************************************************
+Phase1 - Instructor Present: Instruction pages
+*************************************************************************************************
+
+*****************************************
+Screen 1
+*****************************************
+
+<text DP_intro1>
+/ items = DP_intro
+/ select = 1
+/ fontstyle = ("Arial", 4%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ vjustify = center
+/ erase = false
+</text>
+
+<trial DP_intro1>
+/ stimulusframes = [1 = clearscreen, DP_intro1, continue]
+/ validresponse = (" ")
+</trial>
+
+<text continue>
+/ items = ("<continuer en appuyant sur la barre d'espace>")
+/ position = (50%, 96%)
+/ size = (80%, 5%)
+/ fontstyle = ("Arial", 2%, false, false, false, false, 5, 1)
+/ erase = false
+</text>
+
+
+
+*****************************************
+Screen 2
+*****************************************
+
+<text DP_intro2>
+/ items = DP_intro
+/ select = 2
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<picture DPexample1>
+/ items = ("slideinstructor1.png")
+/ position = (50%, 40%)
+/ size = (40%, 40%)
+/ erase = false
+</picture>
+
+<trial DP_intro2>
+/ stimulusframes = [1 = clearscreen, DP_intro2, DPexample1, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 3
+*****************************************
+
+<text DP_intro3>
+/ items = DP_intro
+/ select = 3
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<picture DPexample2>
+/ items = ("slideinstructor2.png")
+/ position = (50%, 40%)
+/ size = (40%, 40%)
+/ erase = false
+</picture>
+
+<trial DP_intro3>
+/ stimulusframes = [1 = clearscreen, DP_intro3, DPexample2, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 4
+*****************************************
+
+<text DP_intro4>
+/ items = DP_intro
+/ select = 4
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<trial DP_intro4>
+/ stimulusframes = [1 = clearscreen, DP_intro4, DPexample1, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 5
+*****************************************
+
+<text DP_intro5>
+/ items = DP_intro
+/ select = 5
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<trial DP_intro5>
+/ stimulusframes = [1 = clearscreen, DP_intro5, DPexample2, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 6
+*****************************************
+
+<text DP_intro6>
+/ items = DP_intro
+/ select = 6
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<trial DP_intro6>
+/ stimulusframes = [1 = clearscreen, DP_intro6, DPexample1, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 7
+*****************************************
+
+<text DP_intro7>
+/ items = DP_intro
+/ select = 7
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<trial DP_intro7>
+/ stimulusframes = [1 = clearscreen, DP_intro7, DPexample2, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 8
+*****************************************
+
+<text DP_intro8>
+/ items = DP_intro
+/ select = 8
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<text continue_DP_screen8>
+/ items = ("<continuer en appyrant sur W, P, C ou la barre d'espace>")
+/ position = (50%, 95%)
+/ size = (80%, 5%)
+/ fontstyle = ("Arial", 2%, false, false, false, false, 5, 1)
+/ erase = false
+</text>
+
+<trial DP_intro8>
+/ stimulusframes = [1 = clearscreen, DP_intro8, DPexample1, continue_DP_screen8]
+/ validresponse = ("W", "P", "C", " ") //go on with "W" for watch, "P" for person, "C" for cellphone, or spacebar for generic
+</trial>
+
+*****************************************
+Screen 9
+*****************************************
+
+<text DP_intro9>
+/ items = DP_intro
+/ select = 9
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<trial DP_intro9>
+/ stimulusframes = [1 = clearscreen, DP_intro9, DPexample2, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 10
+*****************************************
+
+<text DP_intro10>
+/ items = DP_intro
+/ select = 10
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<text continue_DP_screen10>
+/ items = ("<continuer en appuyant sur G, S, N ou la barre d'espacebar>")
+/ position = (50%, 95%)
+/ size = (80%, 5%)
+/ fontstyle = ("Arial", 2%, false, false, false, false, 5, 1)
+/ erase = false
+</text>
+
+<trial DP_intro10>
+/ stimulusframes = [1 = clearscreen, DP_intro10, DPexample1, continue_DP_screen10]
+/ validresponse = ("G", "S", "N", " ") //go on with "G" for goose, "S" for scissors, "N" for nailpolish, or spacebar for generic
+</trial>
+
+*****************************************
+Screen 11
+*****************************************
+
+<text DP_intro11>
+/ items = DP_intro
+/ select = 11
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<text continue_DP_screen11>
+/ items = ("continuer en appuyant sur R(épéter) ou la barre d'espace")
+/ position = (50%, 95%)
+/ size = (80%, 5%)
+/ fontstyle = ("Arial", 2%, false, false, false, false, 5, 1)
+/ erase = false
+</text>
+
+<trial DP_intro11>
+/ stimulusframes = [1 = clearscreen, DP_intro11, DPexample2, continue_DP_screen11]
+/ validresponse = ("R", " ")
+</trial>
+
+*****************************************
+Screen 12
+*****************************************
+
+<text DP_intro12>
+/ items = DP_intro
+/ select = 12
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ vjustify = center
+/ erase = false
+</text>
+
+<trial DP_intro12>
+/ stimulusframes = [1 = clearscreen, DP_intro12, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 13
+*****************************************
+
+<text DP_intro13>
+/ items = DP_intro
+/ select = 13
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ size = (85%, 85%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<trial DP_intro13>
+/ stimulusframes = [1 = clearscreen, DP_intro13, DPexample1, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 14
+*****************************************
+
+<text DP_intro14>
+/ items = DP_intro
+/ select = 14
+/ fontstyle = ("Arial", 2.95%, false, false, false, false, 5, 1)
+/ size = (85%, 85%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<trial DP_intro14>
+/ stimulusframes = [1 = clearscreen, DP_intro14, DPexample1, continue]
+/ validresponse = (" ")
+</trial>
+
+
+*************************************************************************************************
+Phase2 - Instructor Absent: Instruction pages
+*************************************************************************************************
+
+*****************************************
+Screen 1
+*****************************************
+
+<text DA_intro1>
+/ items = DA_intro
+/ select = 1
+/ fontstyle = ("Arial", 2.8%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<picture DAexample1>
+/ items = ("slidenoinstructor1.png")
+/ position = (50%, 40%)
+/ size = (40%, 40%)
+/ erase = false
+</picture>
+
+<trial DA_intro1>
+/ stimulusframes = [1 = clearscreen, DA_intro1, DAexample1, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 2
+*****************************************
+
+<text DA_intro2>
+/ items = DA_intro
+/ select = 2
+/ fontstyle = ("Arial", 2.8%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<trial DA_intro2>
+/ stimulusframes = [1 = clearscreen, DA_intro2, DAexample1, continue]
+/ validresponse = (" ")
+</trial>
+
+
+*****************************************
+Screen 3
+*****************************************
+
+<text DA_intro3>
+/ items = DA_intro
+/ select = 3
+/ fontstyle = ("Arial", 2.8%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<trial DA_intro3>
+/ stimulusframes = [1 = clearscreen, DA_intro3, DAexample1, continue]
+/ validresponse = (" ")
+</trial>
+
+*****************************************
+Screen 4
+*****************************************
+
+<text DA_intro4>
+/ items = DA_intro
+/ select = 4
+/ fontstyle = ("Arial", 2.8%, false, false, false, false, 5, 1)
+/ size = (80%, 80%)
+/ position = (10%, 10%)
+/ halign = left
+/ valign = top
+/ erase = false
+</text>
+
+<picture DAexample2>
+/ items = ("slidenoinstructor2.png")
+/ position = (50%, 40%)
+/ size = (40%, 40%)
+/ erase = false
+</picture>
+
+<trial DA_intro4>
+/ stimulusframes = [1 = clearscreen, DA_intro4, DAexample2, continue]
+/ validresponse = (" ")
+</trial>
+
+*************************************************************************************************
+Practice & Test Instructions
+*************************************************************************************************
+
+<text instructions>
+/ items = practicetestinstructions
+/ size = (80%, 80%)
+/ select = sequence
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ vjustify = center
+/ hjustify = left
+/ erase = false
+</text>
+
+<trial instruction>
+/ stimulusframes = [1 = clearscreen, instructions, continue]
+/ validresponse = (" ")
+/ recorddata = false
+/ responsemessage = (" ", clearscreen, 0)
+</trial>
+
+**************************************************************************************************************
+finish trial
+**************************************************************************************************************
+
+<trial finish>
+/ inputdevice = mouse
+/ stimulusframes = [1 = finish, exitButton]
+/ validresponse = (exitButton)
+/ recorddata = false
+</trial>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	STIMULI
+**************************************************************************************************************
+**************************************************************************************************************
+
+**************************************************************************************
+Pictures of 8 Objects in the cupboard
+**************************************************************************************
+
+//the following stimuli present the 8 objects in the cupboard
+
+//these items reset for each trial and are filled during runtime with the appropriate image picture
+<item object1>
+</item>
+
+<picture object1>
+/ items = object1
+/ select = 1
+/ size = (18%, 18%)
+/ halign = left
+/ valign = top
+/ erase = false
+/ dropsource = true
+</picture>
+
+<item object2>
+</item>
+
+<picture object2>
+/ items = object2
+/ select = 1
+/ size = (18%, 18%)
+/ halign = left
+/ valign = top
+/ erase = false
+/ dropsource = true
+</picture>
+
+<item object3>
+</item>
+
+<picture object3>
+/ items = object3
+/ select = 1
+/ size = (18%, 18%)
+/ halign = left
+/ valign = top
+/ erase = false
+/ dropsource = true
+</picture>
+
+<item object4>
+</item>
+
+<picture object4>
+/ items = object4
+/ select = 1
+/ size = (18%, 18%)
+/ halign = left
+/ valign = top
+/ erase = false
+/ dropsource = true
+</picture>
+
+<item object5>
+</item>
+
+<picture object5>
+/ items = object5
+/ select = 1
+/ size = (18%, 18%)
+/ halign = left
+/ valign = top
+/ erase = false
+/ dropsource = true
+</picture>
+
+<item object6>
+</item>
+
+<picture object6>
+/ items = object6
+/ select = 1
+/ size = (18%, 18%)
+/ halign = left
+/ valign = top
+/ erase = false
+/ dropsource = true
+</picture>
+
+<item object7>
+</item>
+
+<picture object7>
+/ items = object7
+/ select = 1
+/ size = (18%, 18%)
+/ halign = left
+/ valign = top
+/ erase = false
+/ dropsource = true
+</picture>
+
+<item object8>
+</item>
+
+<picture object8>
+/ items = object8
+/ select = 1
+/ size = (18%, 18%)
+/ halign = left
+/ valign = top
+/ erase = false
+/ dropsource = true
+</picture>
+
+**************************************************************************************
+Soundfile: the soundfile that gives the current move instructions
+**************************************************************************************
+
+<sound practiceSoundfile_DP>
+/ items = practiceSoundfiles_DP
+/ select = values.index
+/ playthrough = false
+</sound>
+
+<sound practiceSoundfile_DA>
+/ items = practiceSoundfiles_DA
+/ select = values.index
+/ playthrough = false
+</sound>
+
+<sound soundfile_DP>
+/ items = soundfiles_DP
+/ select = values.index
+/ playthrough = false
+</sound>
+
+<sound soundfile_DA>
+/ items = soundfiles_DA
+/ select = values.index
+/ playthrough = false
+</sound>
+
+***************************************************************************************
+Grid Image: the image that contains the current (empty) cupboard image
+***************************************************************************************
+
+<picture practiceGrid_DP>
+/ items = practicebackgrounds_DP
+/ select = values.index
+/ size = (90%, 90%)
+/ erase = false
+</picture>
+
+//if parameters.debug_showoriginalcupboardimages is set to true
+//this picture presents the original (filled) cupboard in the left hand corner of the screen
+//this way, the original cupboard images can be compared to the ones created by the script on the fly
+<picture originalgrid_practiceDP>
+/ items = practiceimages_DP
+/ select = values.index
+/ size = (20%, 20%)
+/ position = (10%, 10%)
+/ erase = false
+</picture>
+
+<picture practiceGrid_DA>
+/ items = practicebackgrounds_DA
+/ select = values.index
+/ size = (90%, 90%)
+/ erase = false
+</picture>
+
+//if parameters.debug_showoriginalcupboardimages is set to true
+//this picture presents the original (filled) cupboard in the left hand corner of the screen
+//this way, the original cupboard images can be compared to the ones created by the script on the fly
+<picture originalgrid_practiceDA>
+/ items = practiceimages_DA
+/ select = values.index
+/ size = (20%, 20%)
+/ position = (10%, 10%)
+/ erase = false
+</picture>
+
+<picture grid_DP>
+/ items = backgrounds_DP
+/ select = values.index
+/ size = (90%, 90%)
+/ erase = false
+</picture>
+
+//if parameters.debug_showoriginalcupboardimages is set to true
+//this picture presents the original (filled) cupboard in the left hand corner of the screen
+//this way, the original cupboard images can be compared to the ones created by the script on the fly
+<picture originalgrid_DP>
+/ items = images_DP
+/ select = values.index
+/ size = (20%, 20%)
+/ position = (10%, 10%)
+/ erase = false
+</picture>
+
+<picture grid_DA>
+/ items = backgrounds_DA
+/ select = values.index
+/ size = (90%, 90%)
+/ erase = false
+</picture>
+
+//if parameters.debug_showoriginalcupboardimages is set to true
+//this picture presents the original (filled) cupboard in the left hand corner of the screen
+//this way, the original cupboard images can be compared to the ones created by the script on the fly
+<picture originalgrid_DA>
+/ items = images_DA
+/ select = values.index
+/ size = (20%, 20%)
+/ position = (10%, 10%)
+/ erase = false
+</picture>
+
+
+***********************************************************************************************************
+Response Boxes: ordered from top left (A) to bottom right (P) in the 4x4 cupboard grid image
+***********************************************************************************************************
+
+//coordinates of the responses
+<expressions>
+/row1_y = 18.9%
+/row2_y = expressions.row1_y + shape.A.height + 0.5%
+/row3_y = expressions.row2_y + shape.A.height + 0.5%
+/row4_y = expressions.row3_y + shape.A.height + 0.5%
+
+/col1_x = 10%
+/col2_x = expressions.col1_x + shape.A.width + 2.75%
+/col3_x = expressions.col2_x + shape.A.width + 2.75%
+/col4_x = expressions.col3_x + shape.A.width + 2.75%
+</expressions>
+
+<shape A>
+/ shape = rectangle
+/ size = (18%*0.75, 18%)
+/ color = red
+/ hposition = expressions.col1_x
+/ vposition = expressions.row1_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col1_x, expressions.row1_y)
+</shape>
+
+<shape B>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = yellow
+/ hposition = expressions.col2_x
+/ vposition = expressions.row1_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col2_x, expressions.row1_y)
+</shape>
+
+<shape C>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = red
+/ hposition = expressions.col3_x
+/ vposition = expressions.row1_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col3_x, expressions.row1_y)
+</shape>
+
+<shape D>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = yellow
+/ hposition = expressions.col4_x
+/ vposition = expressions.row1_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col4_x, expressions.row1_y)
+</shape>
+
+<shape E>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = yellow
+/ hposition = expressions.col1_x
+/ vposition = expressions.row2_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col1_x, expressions.row2_y)
+</shape>
+
+<shape F>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = red
+/ hposition = expressions.col2_x
+/ vposition = expressions.row2_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col2_x, expressions.row2_y)
+</shape>
+
+<shape G>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = yellow
+/ hposition = expressions.col3_x
+/ vposition = expressions.row2_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col3_x, expressions.row2_y)
+</shape>
+
+<shape H>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = red
+/ hposition = expressions.col4_x
+/ vposition = expressions.row2_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col4_x, expressions.row2_y)
+</shape>
+
+<shape I>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = red
+/ hposition = expressions.col1_x
+/ vposition = expressions.row3_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col1_x, expressions.row3_y)
+</shape>
+
+<shape J>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = yellow
+/ hposition = expressions.col2_x
+/ vposition = expressions.row3_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col2_x, expressions.row3_y)
+</shape>
+
+<shape K>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = red
+/ hposition = expressions.col3_x
+/ vposition = expressions.row3_y
+/ halign = left
+/ valign = top
+/erase = false
+/ droptarget = true
+/ dropposition = (expressions.col3_x, expressions.row3_y)
+</shape>
+
+<shape L>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = yellow
+/ hposition = expressions.col4_x
+/ vposition = expressions.row3_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col4_x, expressions.row3_y)
+</shape>
+
+<shape M>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = yellow
+/ hposition = expressions.col1_x
+/ vposition = expressions.row4_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col1_x, expressions.row4_y)
+</shape>
+
+<shape N>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = red
+/ hposition = expressions.col2_x
+/ vposition = expressions.row4_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col2_x, expressions.row4_y)
+</shape>
+
+<shape O>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = yellow
+/ hposition = expressions.col3_x
+/ vposition = expressions.row4_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col3_x, expressions.row4_y)
+</shape>
+
+<shape P>
+/ shape = rectangle
+/ width = shape.A.width
+/ height = shape.A.height
+/ color = red
+/ hposition = expressions.col4_x
+/ vposition = expressions.row4_y
+/ halign = left
+/ valign = top
+/ erase = false
+/ droptarget = true
+/ dropposition = (expressions.col4_x, expressions.row4_y)
+</shape>
+
+<text soundfileend>
+/ items = ("")
+/ position = (50%, 99%)
+/ erase = false
+</text>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	LISTS	
+**************************************************************************************************************
+**************************************************************************************************************
+
+
+*************************************************
+Data Lists: used for descriptive statistics
+store correct latencies/accuracy data
+fill up during runtime
+*************************************************
+
+ACC1/RT1 = accuracy of answer1/corrRT of answer1
+ACC2/RT2 = accuracy of answer2/corrRT of answer2
+DP = director present
+DA = director absent
+
+Note: list stores 1 = correct response; 0 = incorrect response for each relevant trial
+any response coded as an error is automatically coded as 0
+
+<list ACC1_experimental_DP>
+</list>
+
+Note: list stores the latency of correct responses for each relevant trial
+<list RT1_experimental_DP>
+</list>
+
+Note: list stores 1 = correct response; 0 = incorrect response for each relevant trial
+any response coded as an error is automatically coded as 0
+<list ACC2_experimental_DP>
+</list>
+
+Note: list stores the latency of correct responses for each relevant trial
+<list RT2_experimental_DP>
+</list>
+
+Note: list stores 1 = correct response; 0 = incorrect response for each relevant trial
+any response coded as an error is automatically coded as 0
+<list ACC1_control_DP>
+</list>
+
+Note: list stores the latency of correct responses for each relevant trial
+<list RT1_control_DP>
+</list>
+
+Note: list stores 1 = correct response; 0 = incorrect response for each relevant trial
+any response coded as an error is automatically coded as 0
+<list ACC2_control_DP>
+</list>
+
+Note: list stores the latency of correct responses for each relevant trial
+<list RT2_control_DP>
+</list>
+
+Note: list stores 1 = correct response; 0 = incorrect response for each relevant trial
+any response coded as an error is automatically coded as 0
+<list ACC1_experimental_DA>
+</list>
+
+Note: list stores the latency of correct responses for each relevant trial
+<list RT1_experimental_DA>
+</list>
+
+Note: list stores 1 = correct response; 0 = incorrect response for each relevant trial
+any response coded as an error is automatically coded as 0
+<list ACC2_experimental_DA>
+</list>
+
+Note: list stores the latency of correct responses for each relevant trial
+<list RT2_experimental_DA>
+</list>
+
+Note: list stores 1 = correct response; 0 = incorrect response for each relevant trial
+any response coded as an error is automatically coded as 0
+<list ACC1_control_DA>
+</list>
+
+Note: list stores the latency of correct responses for each relevant trial
+<list RT1_control_DA>
+</list>
+
+Note: list stores 1 = correct response; 0 = incorrect response for each relevant trial
+any response coded as an error is automatically coded as 0
+<list ACC2_control_DA>
+</list>
+
+Note: list stores the latency of correct responses for each relevant trial
+<list RT2_control_DA>
+</list>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	TRIALS: Demo
+**************************************************************************************************************
+**************************************************************************************************************
+
+//Demo trial to demonstrate the drag-drop functionality during the instruction block
+<trial demo>
+/ inputdevice = dragdrop
+/ ontrialbegin = [
+	
+	//Independent Variables: stored in helper files	
+	//use the updated values.index to retrieve the necessary information for this trial
+	values.condition = 1; //director present trial
+	values.set = "demo";
+	values.trialtype = "demo";
+	values.setitemnumber = "";
+	values.taskInstructions = "";
+	values.image = "";
+	values.presentedGrid = "";	
+	values.soundfile = "";
+	values.correctAnswer1 = "";
+	values.wrongAnswer = "";
+	values.blocktype = "";
+	values.position = "";
+	values.actualSet = "demo";
+	values.correctAnswer2 = "";
+	
+	//Dependent Variables:
+	values.answer1 = ""; //used to store the position of the selected object
+	values.answer2 = ""; //used to store the position of the dropped object
+	values.answer1RT = "";//used to store the latency of selecting the dropped object
+	values.answer2RT = ""; //used to store the latency at the end of the dropping action
+	values.correct1 = ""; //used to store the accuracy of selecting the dropped object
+	values.correct2 = ""; //used to store the accuracy of selecting the new location for the dropped object	
+	
+	
+	//run function that will determine which objects will be placed in the current cupboard based on values.actualSet
+	expressions.determineObjectsForCurrentSet;
+]
+/ stimulusframes = [1 = clearscreen, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P,
+demogrid_DP, object1, object2, object3, object4, object5, object6, object7, object8]
+/ validresponse = (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P)
+/ beginresponsetime = 0
+/ responseinterrupt = frames
+/ posttrialpause = parameters.posttrialpause
+</trial>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	TRIALS: Practice
+**************************************************************************************************************
+**************************************************************************************************************
+
+//DP = director present
+<trial practiceDP>
+/ inputdevice = dragdrop
+/ ontrialbegin = [
+	values.index +=1;//advance to next trial
+	
+	//Independent Variables: stored in helper files	
+	//use the updated values.index to retrieve the necessary information for this trial
+	values.condition = 1; //director present trial
+	values.set = item.practiceactualSetnumbers_DP.item(values.index);
+	values.trialtype = "practice";
+	values.setitemnumber = "";
+	values.taskInstructions = item.practicetaskInstructions_DP.item(values.index);
+	values.image = item.practiceimages_DP.item(values.index);
+	values.presentedGrid = item.practicebackgrounds_DP.item(values.index);	
+	values.soundfile = item.practicesoundfiles_DP.item(values.index);
+	values.correctAnswer1 = item.practicecorrectAnswers_DP.item(values.index);
+	values.wrongAnswer = "";
+	values.blocktype = "";
+	values.position = "";
+	values.actualSet = item.practiceactualSetnumbers_DP.item(values.index);
+	values.correctAnswer2 = expressions.determineCorrectAnswer2;
+	
+	//Dependent Variables:
+	values.answer1 = ""; //used to store the position of the selected object
+	values.answer2 = ""; //used to store the position of the dropped object
+	values.answer1RT = "";//used to store the latency of selecting the dropped object
+	values.answer2RT = ""; //used to store the latency at the end of the dropping action
+	values.correct1 = ""; //used to store the accuracy of selecting the dropped object
+	values.correct2 = ""; //used to store the accuracy of selecting the new location for the dropped object
+	values.foilSelected = 0; //used to store if participant chooses the foil answer in an experimental trial
+	
+	
+	//run function that will determine which objects will be placed in the current cupboard based on values.actualSet
+	expressions.determineObjectsForCurrentSet;
+	
+	//present soundfile as a dynamic stimulus:
+	trial.practiceDP.insertstimulustime(sound.practiceSoundfile_DP, parameters.soundfileDelay);
+	trial.practiceDP.insertstimulustime(text.soundfileend, (parameters.soundfileDelay + parameters.soundfileDuration));		
+]
+/ stimulusframes = [1 = clearscreen, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P,
+practicegrid_DP, object1, object2, object3, object4, object5, object6, object7, object8, originalgrid_practiceDP]
+/ validresponse = (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P)
+/ beginresponsetime = parameters.soundfileDelay
+/ responseinterrupt = frames
+/ timeout = parameters.soundfileDelay + parameters.responseTimeout + values.debugTimeoutCorrection//participants have parameters.responseTimeout after onset of soundfile
+/ iscorrectresponse = [
+	//*Determine Dependent Variables*
+	//determine which object was dropped and store it under values.answer1
+	values.droppedObject = trial.practiceDP.lastdropsource;
+	if (values.droppedObject == "object1"){
+		values.answer1 = values.object1Location;
+	} else if (values.droppedObject == "object2"){
+		values.answer1 = values.object2Location;
+	} else if (values.droppedObject == "object3"){
+		values.answer1 = values.object3Location;
+	} else if (values.droppedObject == "object4"){
+		values.answer1 = values.object4Location;
+	} else if (values.droppedObject == "object5"){
+		values.answer1 = values.object5Location;
+	} else if (values.droppedObject == "object6"){
+		values.answer1 = values.object6Location;
+	} else if (values.droppedObject == "object7"){
+		values.answer1 = values.object7Location;
+	} else if (values.droppedObject == "object8"){
+		values.answer1 = values.object8Location;
+	};
+	//determine if the dropped object was the correct one to be moved in this trial
+	values.correct1 = (values.answer1 == values.correctAnswer1);
+	
+	//determine the latency of selecting the dropped object
+	//the latency of selecting the dropped object is calculated as: 
+	//latency of final response (dropping the object) - the time it took to drop it.
+	values.answer1RT = trial.practiceDP.latency - trial.practiceDP.lastdroplatency;
+	
+	//determine where the dropped object was moved and store that information under values.answer2
+	values.answer2 = trial.practiceDP.response;
+	//determine if the dropped object was moved to the correct location
+	values.correct2 = (values.answer2 == values.correctAnswer2);
+	//determine the latency of the drop action
+	values.answer2RT = trial.practiceDP.latency;
+
+	return (values.correct1 == 1);
+]
+
+/ ontrialend = [
+	//dynamic stimuli insertions requires the resetting of the stimulusframes at the end of the trial:
+	trial.practiceDP.resetstimulusframes();	
+]
+/ posttrialpause = parameters.posttrialpause //present the dropped object in its new location for a little while before erasing the scene
+/ branch = [
+	return trial.iti;
+]
+</trial>
+
+//DA = director absent
+<trial practiceDA>
+/ inputdevice = dragdrop
+/ ontrialbegin = [
+	values.index +=1;//advance to next trial
+	
+	//Independent Variables: stored in helper files	
+	//use the updated values.index to retrieve the necessary information for this trial
+	values.condition = 2; //director absent trial
+	values.set = item.practiceactualSetnumbers_DA.item(values.index);
+	values.trialtype = "practice";
+	values.setitemnumber = "";
+	values.taskInstructions = item.practicetaskInstructions_DA.item(values.index);
+	values.image = item.practiceimages_DA.item(values.index);
+	values.presentedGrid = item.practicebackgrounds_DA.item(values.index);	
+	values.soundfile = item.practicesoundfiles_DA.item(values.index);
+	values.correctAnswer1 = item.practicecorrectAnswers_DA.item(values.index);
+	values.wrongAnswer = "";
+	values.blocktype = "";
+	values.position = "";
+	values.actualSet = item.practiceactualSetnumbers_DA.item(values.index);
+	values.correctAnswer2 = expressions.determineCorrectAnswer2;
+	
+	//Dependent Variables:
+	values.answer1 = ""; //used to store the position of the selected object
+	values.answer2 = ""; //used to store the position of the dropped object
+	values.answer1RT = "";//used to store the latency of selecting the dropped object
+	values.answer2RT = ""; //used to store the latency at the end of the dropping action
+	values.correct1 = ""; //used to store the accuracy of selecting the dropped object
+	values.correct2 = ""; //used to store the accuracy of selecting the new location for the dropped object	
+	values.foilSelected = 0; //used to store if participant chooses the foil answer in an experimental trial	
+	
+	//run function that will determine which objects will be placed in the current cupboard based on values.actualSet
+	expressions.determineObjectsForCurrentSet;
+	
+	//present soundfile as a dynamic stimulus:
+	trial.practiceDA.insertstimulustime(sound.practiceSoundfile_DA, parameters.soundfileDelay);
+	trial.practiceDA.insertstimulustime(text.soundfileend, (parameters.soundfileDelay + parameters.soundfileDuration));	
+	
+]
+/ stimulusframes = [1 = clearscreen, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P,
+practicegrid_DA, object1, object2, object3, object4, object5, object6, object7, object8, originalgrid_practiceDA]
+/ validresponse = (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P)
+/ beginresponsetime = parameters.soundfileDelay
+/ responseinterrupt = frames
+/ timeout = parameters.soundfileDelay + parameters.responseTimeout + values.debugTimeoutCorrection//participants have parameters.responseTimeout after onset of soundfile
+/ iscorrectresponse = [
+	//*Determine Dependent Variables*
+	//determine which object was dropped and store it under values.answer1
+	values.droppedObject = trial.practiceDA.lastdropsource;
+	if (values.droppedObject == "object1"){
+		values.answer1 = values.object1Location;
+	} else if (values.droppedObject == "object2"){
+		values.answer1 = values.object2Location;
+	} else if (values.droppedObject == "object3"){
+		values.answer1 = values.object3Location;
+	} else if (values.droppedObject == "object4"){
+		values.answer1 = values.object4Location;
+	} else if (values.droppedObject == "object5"){
+		values.answer1 = values.object5Location;
+	} else if (values.droppedObject == "object6"){
+		values.answer1 = values.object6Location;
+	} else if (values.droppedObject == "object7"){
+		values.answer1 = values.object7Location;
+	} else if (values.droppedObject == "object8"){
+		values.answer1 = values.object8Location;
+	};
+	//determine if the dropped object was the correct one to be moved in this trial
+	values.correct1 = (values.answer1 == values.correctAnswer1);
+	
+	//determine the latency of selecting the dropped object
+	//the latency of selecting the dropped object is calculated as: 
+	//latency of final response (dropping the object) - the time it took to drop it.
+	values.answer1RT = trial.practiceDA.latency - trial.practiceDA.lastdroplatency;
+	
+	//determine where the dropped object was moved and store that information under values.answer2
+	values.answer2 = trial.practiceDA.response;
+	//determine if the dropped object was moved to the correct location
+	values.correct2 = (values.answer2 == values.correctAnswer2);
+	//determine the latency of the drop action
+	values.answer2RT = trial.practiceDA.latency;
+
+	return (values.correct1 == 1);
+]
+
+/ ontrialend = [
+	//dynamic stimuli insertions requires the resetting of the stimulusframes at the end of the trial:
+	trial.practiceDA.resetstimulusframes();	
+]
+/ posttrialpause = parameters.posttrialpause //present the dropped object in its new location for a little while before erasing the scene
+/ branch = [
+	return trial.iti;
+]
+</trial>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	TRIALS: Test
+**************************************************************************************************************
+**************************************************************************************************************
+
+<trial DP>
+/ inputdevice = dragdrop
+/ ontrialbegin = [
+	values.index +=1;//advance to next trial
+	
+	//Independent Variables: stored in helper files	
+	//use the updated values.index to retrieve the necessary information for this trial
+	values.condition = 1; //director present trial
+	values.set = item.sets_DP.item(values.index);
+	values.trialtype = item.trialtypes_DP.item(values.index);
+	values.setitemnumber = item.setItemnumbers_DP.item(values.index);
+	values.taskInstructions = item.taskInstructions_DP.item(values.index);
+	values.image = item.images_DP.item(values.index);
+	values.presentedGrid = item.backgrounds_DP.item(values.index);
+	values.soundfile = item.soundfiles_DP.item(values.index);
+	values.correctAnswer1 = item.correctAnswers_DP.item(values.index);
+	values.wrongAnswer = item.wrongAnswers_DP.item(values.index);
+	values.blocktype = item.blockTypes_DP.item(values.index);
+	values.position = item.positions_DP.item(values.index);
+	values.actualSet = item.actualSetnumbers_DP.item(values.index);
+	values.correctAnswer2 = expressions.determineCorrectAnswer2;
+	
+	//Dependent Variables:
+	values.answer1 = ""; //used to store the position of the selected object
+	values.answer2 = ""; //used to store the position of the dropped object
+	values.answer1RT = "";//used to store the latency of selecting the dropped object
+	values.answer2RT = ""; //used to store the latency at the end of the dropping action
+	values.correct1 = ""; //used to store the accuracy of selecting the dropped object
+	values.correct2 = ""; //used to store the accuracy of selecting the new location for the dropped object	
+	values.foilSelected = 0; //used to store if participant chooses the foil answer in an experimental trial	
+	
+	//run function that will determine which objects will be placed in the current cupboard based on values.actualSet
+	expressions.determineObjectsForCurrentSet;
+	
+	//present soundfile as a dynamic stimulus:
+	trial.DP.insertstimulustime(sound.soundfile_DP, parameters.soundfileDelay);
+	trial.DP.insertstimulustime(text.soundfileend, (parameters.soundfileDelay + parameters.soundfileDuration));//this items is currently required to collect responses at soundfile onset without cutting off the soundfile
+	
+]
+/ stimulusframes = [1 = clearscreen, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P,
+grid_DP, object1, object2, object3, object4, object5, object6, object7, object8, originalgrid_DP]
+/ validresponse = (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P)
+/ beginresponsetime = parameters.soundfileDelay
+/ responseinterrupt = frames
+/ timeout = parameters.soundfileDelay + parameters.responseTimeout + values.debugTimeoutCorrection//participants have parameters.responseTimeout after onset of soundfile
+/ iscorrectresponse = [
+	//*Determine Dependent Variables*
+	//determine which object was dropped and store it under values.answer1
+	values.droppedObject = trial.DP.lastdropsource;
+	if (values.droppedObject == "object1"){
+		values.answer1 = values.object1Location;
+	} else if (values.droppedObject == "object2"){
+		values.answer1 = values.object2Location;
+	} else if (values.droppedObject == "object3"){
+		values.answer1 = values.object3Location;
+	} else if (values.droppedObject == "object4"){
+		values.answer1 = values.object4Location;
+	} else if (values.droppedObject == "object5"){
+		values.answer1 = values.object5Location;
+	} else if (values.droppedObject == "object6"){
+		values.answer1 = values.object6Location;
+	} else if (values.droppedObject == "object7"){
+		values.answer1 = values.object7Location;
+	} else if (values.droppedObject == "object8"){
+		values.answer1 = values.object8Location;
+	};
+	//determine if the dropped object was the correct one to be moved in this trial
+	values.correct1 = (values.answer1 == values.correctAnswer1);
+	
+	//determine the latency of selecting the dropped object
+	//the latency of selecting the dropped object is calculated as: 
+	//latency of final response (dropping the object) - the time it took to drop it.
+	values.answer1RT = trial.DP.latency - trial.DP.lastdroplatency;
+	
+	//determine where the dropped object was moved and store that information under values.answer2
+	values.answer2 = trial.DP.response;
+	//determine if the dropped object was moved to the correct location
+	values.correct2 = (values.answer2 == values.correctAnswer2);
+	//determine the latency of the drop action
+	values.answer2RT = trial.DP.latency;
+
+	return (values.correct1 == 1);
+]
+
+/ ontrialend = [
+	//dynamic stimuli insertions requires the resetting of the stimulusframes at the end of the trial:
+	trial.DP.resetstimulusframes();
+	
+	//*Summary Variables*
+	if (values.trialtype == "experimental"){
+		list.ACC1_experimental_DP.appenditem(values.correct1);
+		list.ACC2_experimental_DP.appenditem(values.correct2);
+		if (values.correct1 == 1){
+			list.RT1_experimental_DP.appenditem(values.answer1RT);
+		} else {
+			if (values.answer1 == values.wrongAnswer){
+				values.countWrongAnswers_DP += 1;
+				values.foilSelected = 1;
+			};
+		};
+		if (values.correct2 == 1){
+			list.RT2_experimental_DP.appenditem(values.answer2RT);
+		};	
+
+	} else if (values.trialtype == "control"){
+		list.ACC1_control_DP.appenditem(values.correct1);
+		list.ACC2_control_DP.appenditem(values.correct2);
+		if (values.correct1 == 1){
+			list.RT1_control_DP.appenditem(values.answer1RT);
+		};
+		if (values.correct2 == 1){
+			list.RT2_control_DP.appenditem(values.answer2RT);
+		};			
+	};		
+]
+/ posttrialpause = parameters.posttrialpause //present the dropped object in its new location for a little while before erasing the scene
+/ branch = [
+	return trial.iti;
+]
+</trial>
+
+<trial DA>
+/ inputdevice = dragdrop
+/ ontrialbegin = [
+	values.index +=1;//advance to next trial
+	
+	//Independent Variables: stored in helper files	
+	//use the updated values.index to retrieve the necessary information for this trial
+	values.condition = 2; //director absent trial
+	values.set = item.sets_DA.item(values.index);
+	values.trialtype = item.trialtypes_DA.item(values.index);
+	values.setitemnumber = item.setItemnumbers_DA.item(values.index);
+	values.taskInstructions = item.taskInstructions_DA.item(values.index);
+	values.image = item.images_DA.item(values.index);
+	values.presentedGrid = item.backgrounds_DA.item(values.index);
+	values.soundfile = item.soundfiles_DA.item(values.index);
+	values.correctAnswer1 = item.correctAnswers_DA.item(values.index);
+	values.wrongAnswer = item.wrongAnswers_DA.item(values.index);
+	values.blocktype = item.blockTypes_DA.item(values.index);
+	values.position = item.positions_DA.item(values.index);
+	values.actualSet = item.actualSetnumbers_DA.item(values.index);
+	values.correctAnswer2 = expressions.determineCorrectAnswer2;
+	
+	//Dependent Variables:
+	values.answer1 = ""; //used to store the position of the selected object
+	values.answer2 = ""; //used to store the position of the dropped object
+	values.answer1RT = "";//used to store the latency of selecting the dropped object
+	values.answer2RT = ""; //used to store the latency at the end of the dropping action
+	values.correct1 = ""; //used to store the accuracy of selecting the dropped object
+	values.correct2 = ""; //used to store the accuracy of selecting the new location for the dropped object	
+	values.foilSelected = 0; //used to store if participant chooses the foil answer in an experimental trial	
+	
+	//run function that will determine which objects will be placed in the current cupboard based on values.actualSet
+	expressions.determineObjectsForCurrentSet;
+	
+	//present soundfile as a dynamic stimulus:
+	trial.DA.insertstimulustime(sound.soundfile_DA, parameters.soundfileDelay);
+	trial.DA.insertstimulustime(text.soundfileend, (parameters.soundfileDelay + parameters.soundfileDuration));//this items is currently required to collect responses at soundfile onset without cutting off the soundfile
+	
+]
+/ stimulusframes = [1 = clearscreen, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P,
+grid_DA, object1, object2, object3, object4, object5, object6, object7, object8, originalgrid_DA]
+/ validresponse = (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P)
+/ beginresponsetime = parameters.soundfileDelay
+/ responseinterrupt = frames
+/ timeout = parameters.soundfileDelay + parameters.responseTimeout + values.debugTimeoutCorrection//participants have parameters.responseTimeout after onset of soundfile
+/ iscorrectresponse = [
+	//*Determine Dependent Variables*
+	//determine which object was dropped and store it under values.answer1
+	values.droppedObject = trial.DA.lastdropsource;
+	if (values.droppedObject == "object1"){
+		values.answer1 = values.object1Location;
+	} else if (values.droppedObject == "object2"){
+		values.answer1 = values.object2Location;
+	} else if (values.droppedObject == "object3"){
+		values.answer1 = values.object3Location;
+	} else if (values.droppedObject == "object4"){
+		values.answer1 = values.object4Location;
+	} else if (values.droppedObject == "object5"){
+		values.answer1 = values.object5Location;
+	} else if (values.droppedObject == "object6"){
+		values.answer1 = values.object6Location;
+	} else if (values.droppedObject == "object7"){
+		values.answer1 = values.object7Location;
+	} else if (values.droppedObject == "object8"){
+		values.answer1 = values.object8Location;
+	};
+	//determine if the dropped object was the correct one to be moved in this trial
+	values.correct1 = (values.answer1 == values.correctAnswer1);
+	
+	//determine the latency of selecting the dropped object
+	//the latency of selecting the dropped object is calculated as: 
+	//latency of final response (dropping the object) - the time it took to drop it.
+	values.answer1RT = trial.DA.latency - trial.DA.lastdroplatency;
+	
+	//determine where the dropped object was moved and store that information under values.answer2
+	values.answer2 = trial.DA.response;
+	//determine if the dropped object was moved to the correct location
+	values.correct2 = (values.answer2 == values.correctAnswer2);
+	//determine the latency of the drop action
+	values.answer2RT = trial.DA.latency;
+
+	return (values.correct1 == 1);
+]
+
+/ ontrialend = [
+	//dynamic stimuli insertions requires the resetting of the stimulusframes at the end of the trial:
+	trial.DA.resetstimulusframes();
+	
+	//*Summary Variables*
+	if (values.trialtype == "experimental"){
+		list.ACC1_experimental_DA.appenditem(values.correct1);
+		list.ACC2_experimental_DA.appenditem(values.correct2);
+		if (values.correct1 == 1){
+			list.RT1_experimental_DA.appenditem(values.answer1RT);
+		} else {
+			if (values.answer1 == values.wrongAnswer){
+				values.countWrongAnswers_DA += 1;
+				values.foilSelected = 1;
+			};
+		};
+		if (values.correct2 == 1){
+			list.RT2_experimental_DA.appenditem(values.answer2RT);
+		};	
+
+	} else if (values.trialtype == "control"){
+		list.ACC1_control_DA.appenditem(values.correct1);
+		list.ACC2_control_DA.appenditem(values.correct2);
+		if (values.correct1 == 1){
+			list.RT1_control_DA.appenditem(values.answer1RT);
+		};
+		if (values.correct2 == 1){
+			list.RT2_control_DA.appenditem(values.answer2RT);
+		};			
+	};		
+]
+/ posttrialpause = parameters.posttrialpause //present the dropped object in its new location for a little while before erasing the scene
+/ branch = [
+	return trial.iti;
+]
+</trial>
+
+
+
+//present a blank screen in between trials
+<trial iti>
+/ stimulusframes = [1= clearscreen]
+/ trialduration = parameters.blankITI
+/ recorddata = false
+</trial>
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	BLOCKS
+**************************************************************************************************************
+**************************************************************************************************************
+
+**************************************
+Director Present
+**************************************
+
+<block DP_A_intro>
+/ skip = [
+	parameters.skipIntro == true; //instructions can be skipped by setting parameters.skipIntro to false
+]
+/ onblockbegin = [
+	if (!computer.haskeyboard){//for touchscreen devices the continue instructions do not have to be presented
+		text.continue.skip;
+		text.continue_DP_screen10.skip;
+		text.continue_DP_screen11.skip;
+		text.continue_DP_screen8.skip;
+	};
+]
+/ trials = [
+	1 = DP_intro1; 
+	2 = DP_intro2; 
+	3 = DP_intro3; 
+	4 = DP_intro4;
+	5 = DP_intro5;
+	6 = DP_intro6;
+	7 = DP_intro7;
+]
+/ branch = [
+	return block.DP_B_intro;
+]
+/ recorddata = false
+</block>
+
+<block DP_B_intro>
+/ trials = [
+	1 = DP_intro8; 
+	2 = DP_intro9; 
+	3 = DP_intro10; 
+	4 = DP_intro11;
+]
+/ branch = [
+	if (trial.DP_intro11.responsetext=="R"){
+		return block.DP_B_intro;
+	} else {
+		return block.DP_C_intro;
+	};
+]
+/ recorddata = false
+</block>
+
+<block DP_C_intro>
+/ trials = [
+	1 = DP_intro12; 
+	2 = DP_intro13; 
+	3 = demo;
+	4 = DP_intro14;
+	5 = demo;
+]
+/ recorddata = false
+</block>
+
+<block DP_practice>
+/ onblockbegin = [
+	values.index = 0;
+	values.condition = 1;
+]
+
+/ trials = [
+	1 = instruction;
+	2-4 = practiceDP;
+	5 = instruction;
+]
+</block>
+
+<block DP>
+/ onblockbegin = [
+	values.index = 0;
+	values.condition = 1;
+]
+/ trials = [1-48 = DP]
+</block>
+
+**************************************
+Director Absent
+**************************************
+
+<block DA_intro>
+/ skip = [
+	parameters.skipIntro == true;
+]
+/ trials = [
+	1 = DA_intro1;
+	2 = DA_intro2;	
+	3 = DA_intro3;	
+	4 = DA_intro4;
+]
+/ recorddata = false
+</block>
+
+<block DA_practice>
+/ onblockbegin = [
+	values.index = 0;
+	values.condition = 2;
+]
+
+/ trials = [
+	1 = instruction;
+	2-4 = practiceDA;
+	5 = instruction;
+]
+</block>
+
+<block DA>
+/ onblockbegin = [
+	values.index = 0;
+	values.condition = 2;
+]
+/ trials = [1-48 = DA]
+</block>
+
+**************************************
+Finish
+**************************************
+
+<block finish>
+/ trials = [
+	1 = finish;
+]
+</block>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EXPERIMENT 
+**************************************************************************************************************
+**************************************************************************************************************
+
+Note: the following 6 expt elements counterbalance the 6 different test versions
+
+<expt >
+/ groups = (1 of 6)
+/ onexptbegin = [
+	values.test = 1; //test1 presents Director Present (order 1) -> Director Absent (order 2)
+	values.setOrder_DP = 1; //set order 1 will be used for the 'Director Present' phase
+	values.setOrder_DA = 2; //set order 2 will be used for the 'Director Absent' phase
+	
+	//this code is relevant for debugging purposes only 
+	//if parameters.debug_showoriginalcupboardimages is set to true,
+	//the presented cupboard images can be compared to the original images
+	//the time of the trials is adjusted, so that enough time is given for the comparison
+	if (parameters.debug_showoriginalcupboardimages == false){
+		picture.originalgrid_DP.skip = true;
+		picture.originalgrid_DA.skip = true;
+		picture.originalgrid_practiceDP.skip = true;
+		picture.originalgrid_practiceDA.skip = true;		
+		values.debugTimeOutCorrection = 0;
+	} else {
+		values.debugTimeOutCorrection = 30000;
+	};
+]
+/ blocks = [
+	1 = DP_A_intro; //if parameters.skipIntro is set to true, the instruction blocks won't run
+	2 = DP_practice;
+	3 = DP;
+	4 = DA_intro;//if parameters.skipIntro is set to true, the instruction blocks won't run
+	5 = DA_practice;
+	6 = DA;
+	7 = finish;
+]
+</expt>
+
+<expt >
+/ groups = (2 of 6)
+/ onexptbegin = [
+	values.test = 2; //test2 presents Director Present (order 2) -> Director Absent (order 3)
+	values.setOrder_DP = 2; //set order 2 will be used for the 'Director Present' phase
+	values.setOrder_DA = 3; //set order 3 will be used for the 'Director Absent' phase
+	
+	//this code is relevant for debugging purposes only 
+	//if parameters.debug_showoriginalcupboardimages is set to true,
+	//the presented cupboard images can be compared to the original images
+	//the time of the trials is adjusted, so that enough time is given for the comparison
+	if (parameters.debug_showoriginalcupboardimages == false){
+		picture.originalgrid_DP.skip = true;
+		picture.originalgrid_DA.skip = true;
+		picture.originalgrid_practiceDP.skip = true;
+		picture.originalgrid_practiceDA.skip = true;		
+		values.debugTimeOutCorrection = 0;
+	} else {
+		values.debugTimeOutCorrection = 30000;
+	};
+]
+/ blocks = [
+	1 = DP_A_intro; //if parameters.skipIntro is set to true, the instruction blocks won't run
+	2 = DP_practice;
+	3 = DP;
+	4 = DA_intro;//if parameters.skipIntro is set to true, the instruction blocks won't run
+	5 = DA_practice;
+	6 = DA;
+	7 = finish;
+]
+</expt>
+
+<expt >
+/ groups = (3 of 6)
+/ onexptbegin = [	
+	values.test = 3; //test3 presents Director Present (order 3) -> Director Absent (order 1)
+	values.setOrder_DP = 3; //set order 3 will be used for the 'Director Present' phase
+	values.setOrder_DA = 1; //set order 1 will be used for the 'Director Absent' phase	
+	
+	//this code is relevant for debugging purposes only 
+	//if parameters.debug_showoriginalcupboardimages is set to true,
+	//the presented cupboard images can be compared to the original images
+	//the time of the trials is adjusted, so that enough time is given for the comparison
+	if (parameters.debug_showoriginalcupboardimages == false){
+		picture.originalgrid_DP.skip = true;
+		picture.originalgrid_DA.skip = true;
+		picture.originalgrid_practiceDP.skip = true;
+		picture.originalgrid_practiceDA.skip = true;		
+		values.debugTimeOutCorrection = 0;
+	} else {
+		values.debugTimeOutCorrection = 30000;
+	};
+]
+/ blocks = [
+	1 = DP_A_intro; //if parameters.skipIntro is set to true, the instruction blocks won't run
+	2 = DP_practice;
+	3 = DP;
+	4 = DA_intro;//if parameters.skipIntro is set to true, the instruction blocks won't run
+	5 = DA_practice;
+	6 = DA;
+	7 = finish;
+]
+</expt>
+
+<expt >
+/ groups = (4 of 6)
+/ onexptbegin = [
+	values.test = 4; //test4 presents Director Present (order 2) -> test4 presents Director Absent (order 1)
+	values.setOrder_DP = 2; //set order 2 will be used for the 'Director Present' phase
+	values.setOrder_DA = 1; //set order 1 will be used for the 'Director Absent' phase
+	
+	//this code is relevant for debugging purposes only 
+	//if parameters.debug_showoriginalcupboardimages is set to true,
+	//the presented cupboard images can be compared to the original images
+	//the time of the trials is adjusted, so that enough time is given for the comparison
+	if (parameters.debug_showoriginalcupboardimages == false){
+		picture.originalgrid_DP.skip = true;
+		picture.originalgrid_DA.skip = true;
+		picture.originalgrid_practiceDP.skip = true;
+		picture.originalgrid_practiceDA.skip = true;		
+		values.debugTimeOutCorrection = 0;
+	} else {
+		values.debugTimeOutCorrection = 30000;
+	};
+]
+/ blocks = [
+	1 = DP_A_intro; //if parameters.skipIntro is set to true, the instruction blocks won't run
+	2 = DP_practice;
+	3 = DP;
+	4 = DA_intro;//if parameters.skipIntro is set to true, the instruction blocks won't run
+	5 = DA_practice;
+	6 = DA;
+	7 = finish;
+]
+</expt>
+
+<expt >
+/ groups = (5 of 6)
+/ onexptbegin = [
+	values.test = 5; //test5  Director Present (order 3) - > presents Director Absent (order 2)
+	values.setOrder_DP = 3; //set order 3 will be used for the 'Director Present' phase
+	values.setOrder_DA = 2; //set order 2 will be used for the 'Director Absent' phase	
+	
+	//this code is relevant for debugging purposes only 
+	//if parameters.debug_showoriginalcupboardimages is set to true,
+	//the presented cupboard images can be compared to the original images
+	//the time of the trials is adjusted, so that enough time is given for the comparison
+	if (parameters.debug_showoriginalcupboardimages == false){
+		picture.originalgrid_DP.skip = true;
+		picture.originalgrid_DA.skip = true;
+		picture.originalgrid_practiceDP.skip = true;
+		picture.originalgrid_practiceDA.skip = true;		
+		values.debugTimeOutCorrection = 0;
+	} else {
+		values.debugTimeOutCorrection = 30000;
+	};
+]
+/ blocks = [
+	1 = DP_A_intro; //if parameters.skipIntro is set to true, the instruction blocks won't run
+	2 = DP_practice;
+	3 = DP;
+	4 = DA_intro;//if parameters.skipIntro is set to true, the instruction blocks won't run
+	5 = DA_practice;
+	6 = DA;
+	7 = finish;
+]
+</expt>
+
+<expt >
+/ groups = (6 of 6)
+/ onexptbegin = [
+	values.test = 6; //test6 presents Director Present (order 1) -> Director Absent (order 3)
+	values.setOrder_DP = 1; //set order 1 will be used for the 'Director Present' phase
+	values.setOrder_DA = 3; //set order 3 will be used for the 'Director Absent' phase
+	
+	//this code is relevant for debugging purposes only 
+	//if parameters.debug_showoriginalcupboardimages is set to true,
+	//the presented cupboard images can be compared to the original images
+	//the time of the trials is adjusted, so that enough time is given for the comparison
+	if (parameters.debug_showoriginalcupboardimages == false){
+		picture.originalgrid_DP.skip = true;
+		picture.originalgrid_DA.skip = true;
+		picture.originalgrid_practiceDP.skip = true;
+		picture.originalgrid_practiceDA.skip = true;		
+		values.debugTimeOutCorrection = 0;
+	} else {
+		values.debugTimeOutCorrection = 30000;
+	};
+]
+/ blocks = [
+	1 = DP_A_intro; //if parameters.skipIntro is set to true, the instruction blocks won't run
+	2 = DP_practice;
+	3 = DP;
+	4 = DA_intro;//if parameters.skipIntro is set to true, the instruction blocks won't run
+	5 = DA_practice;
+	6 = DA;
+	7 = finish;
+]
+</expt>
+
+<monkey>
+/ latencydistribution = normal(3000, 500)
+/ percentcorrect = 80
+</monkey>
+
+
+**************************************************************************************************************
+												End of File
+**************************************************************************************************************

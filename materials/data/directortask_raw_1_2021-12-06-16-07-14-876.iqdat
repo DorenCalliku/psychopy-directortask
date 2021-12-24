@@ -1,0 +1,4 @@
+build	computer.platform	date	time	subject	group	session	blockcode	blocknum	trialcode	trialnum	setOrder_DP	setOrder_DA	test	condition	set	actualSet	trialtype	setitemnumber	taskInstructions	image	presentedGrid	soundfile	correctAnswer1	wrongAnswer	correctAnswer2	blocktype	position	answer1	correct1	foilSelected	answer1RT	answer2	correct2	answer2RT	countWrongAnswers_DP	countWrongAnswers_DA	droppedObject	response	correct	latency	debug_showoriginalcupboardimages
+6.5.1	mac	2021-12-06	17:07:14	1	1	1	DP_practice	4	practiceDP	2	1	2	1	1	p1	p1	practice		Egg - right	p1.png	igp1.png	P1V1.wav	F		G				0	0	-87547	0	0	0	0	0		0	0	4500	0
+6.5.1	mac	2021-12-06	17:07:14	1	1	1	DP_practice	4	practiceDP	4	1	2	1	1	p1	p1	practice		Sock - down	p1.png	igp1.png	P1V2.wav	D		H			D	1	0	2087	H	1	2491	0	0	object2	H	1	2491	0
+6.5.1	mac	2021-12-06	17:07:14	1	1	1	DP_practice	4	practiceDP	6	1	2	1	1	p1	p1	practice		Wallet - right	p1.png	igp1.png	P1V3.wav	N		O			N	1	0	2723	O	1	3240	0	0	object7	O	1	3240	0

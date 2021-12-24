@@ -1,0 +1,57 @@
+build	computer.platform	date	time	subject	group	session	blockcode	blocknum	trialcode	trialnum	setOrder_DP	setOrder_DA	test	condition	set	actualSet	trialtype	setitemnumber	taskInstructions	image	presentedGrid	soundfile	correctAnswer1	wrongAnswer	correctAnswer2	blocktype	position	answer1	correct1	foilSelected	answer1RT	answer2	correct2	answer2RT	countWrongAnswers_DP	countWrongAnswers_DA	droppedObject	response	correct	latency	debug_showoriginalcupboardimages
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP_practice	4	practiceDP	2	1	2	1	1	p1	p1	practice		Egg - right	p1.png	igp1.png	P1V1.wav	F		G				0	0	0	0	0	0	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP_practice	4	practiceDP	4	1	2	1	1	p1	p1	practice		Sock - down	p1.png	igp1.png	P1V2.wav	D		H			F	0	0	-747	G	0	25	0	0	object3	G	0	25	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP_practice	4	practiceDP	6	1	2	1	1	p1	p1	practice		Wallet - right	p1.png	igp1.png	P1V3.wav	N		O			D	0	0	-848	H	0	1003	0	0	object2	H	0	1003	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	1	1	2	1	1	4	4	filler	1	Person - left	ig1be.png	ig1.png	ig1beV1.wav	D	?	C	2	2	D	1	0	2294	C	1	2679	0	0	object2	C	1	2679	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	3	1	2	1	1	4	4	experimental	2	Large cup - up	ig1be.png	ig1.png	ig1beV3.wav	M	P	I	2	2	D	0	0	3103	C	0	3505	0	0	object2	C	0	3505	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	5	1	2	1	1	4	4	filler	3	Apple - down	ig1be.png	ig1.png	ig1beV2.wav	J	?	N	2	2		0	0	-85273	0	0	0	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	7	1	2	1	1	5	5	control	1	Small candle - down	ig2cc.png	ig2.png	ig2ccV1.wav	D	?	H	1	1		0	0	-92467	0	0	0	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	9	1	2	1	1	5	5	filler	2	Baby - right	ig2cc.png	ig2.png	ig2ccV2.wav	J	?	K	1	1	J	1	0	2325	I	0	2733	0	0	object4	I	1	2733	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	11	1	2	1	1	5	5	filler	3	Car - left	ig2cc.png	ig2.png	ig2ccV3.wav	O	?	N	1	1	J	0	0	-836	B	0	2381	0	0	object4	B	0	2381	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	13	1	2	1	1	11	11	control	1	Bottom holepunch - up	ig3gc.png	ig3.png	ig3gcV2.wav	E	?	A	1	1	O	0	0	221	K	0	463	0	0	object7	K	0	463	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	15	1	2	1	1	11	11	filler	2	Fluffy toy - right 	ig3gc.png	ig3.png	ig3gcV1.wav	M	?	N	1	1	M	1	0	1872	N	1	2333	0	0	object6	N	1	2333	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	17	1	2	1	1	11	11	filler	3	Dice - left	ig3gc.png	ig3.png	ig3gcV3.wav	P	?	O	1	1	O	0	0	-272	0	0	0	0	0	object7	0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	19	1	2	1	1	2	2	filler	1	Top block - right	ig1ae.png	ig1.png	ig1aeV2.wav	C	?	D	2	3	C	1	0	2571	D	1	3106	0	0	object2	D	1	3106	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	21	1	2	1	1	2	2	filler	2	Person - down	ig1ae.png	ig1.png	ig1aeV3.wav	H	?	L	2	3	H	1	0	2391	L	1	3051	0	0	object4	L	1	3051	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	23	1	2	1	1	2	2	experimental	3	Bottom block - left	ig1ae.png	ig1.png	ig1aeV4.wav	K	N	J	2	3	C	0	0	3574	D	0	3958	0	0	object2	D	0	3958	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	25	1	2	1	1	15	15	filler	1	Fox - down	ig4hc.png	ig4.png	ig4hcV1.wav	H	?	L	1	2	H	1	0	2530	L	1	2908	0	0	object4	L	1	2908	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	27	1	2	1	1	15	15	control	2	Top syringe - left	ig4hc.png	ig4.png	ig4hcV2.wav	K	?	J	1	2		0	0	2530	0	0	2908	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	29	1	2	1	1	15	15	filler	3	Bottom syringe - up	ig4hc.png	ig4.png	ig4hcV3.wav	P	?	L	1	2	H	0	0	3109	G	0	3474	0	0	object4	G	0	3474	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	31	1	2	1	1	8	8	filler	1	Rhino - up	ig2de.png	ig2.png	ig2deV4.wav	N	?	J	2	3	F	0	0	3684	B	0	3957	0	0	object3	B	0	3957	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	33	1	2	1	1	8	8	filler	2	Bottom can - left	ig2de.png	ig2.png	ig2deV3.wav	P	?	O	2	3	N	0	0	2946	J	0	3348	0	0	object7	J	0	3348	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	35	1	2	1	1	8	8	experimental	3	Top can - right	ig2de.png	ig2.png	ig2deV1.wav	F	B	G	2	3		0	0	-174947	0	0	0	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	37	1	2	1	1	13	13	filler	1	Large ball - right	ig4fc.png	ig4.png	ig4fcV1.wav	M	?	N	1	3	M	1	0	3228	N	1	3873	0	0	object6	N	1	3873	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	39	1	2	1	1	13	13	filler	2	Tractor - right	ig4fc.png	ig4.png	ig4fcV4.wav	A	?	B	1	3	A	1	0	2318	B	1	2725	0	0	object1	B	1	2725	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	41	1	2	1	1	13	13	control	3	Small ball - down	ig4fc.png	ig4.png	ig4fcV3.wav	J	?	N	1	3	J	1	0	2691	N	1	3362	0	0	object5	N	1	3362	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	43	1	2	1	1	10	10	filler	1	Camera - right	ig3ee.png	ig3.png	ig3eeV2.wav	M	?	N	2	2		0	0	-201700	0	0	0	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	45	1	2	1	1	10	10	experimental	2	Large jar - right	ig3ee.png	ig3.png	ig3eeV4.wav	I	O	J	2	2	G	0	0	2514	K	0	3071	0	0	object3	K	0	3071	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	47	1	2	1	1	10	10	filler	3	Small jar - down	ig3ee.png	ig3.png	ig3eeV3.wav	G	?	K	2	2	G	1	0	2747	K	1	3052	0	0	object3	K	1	3052	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	49	1	2	1	1	14	14	filler	1	Keys - down	ig4fe.png	ig4.png	ig4feV1.wav	C	?	G	2	3	C	1	0	2187	G	1	2493	0	0	object2	G	1	2493	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	51	1	2	1	1	14	14	filler	2	Cow - up	ig4fe.png	ig4.png	ig4feV4.wav	P	?	L	2	3	P	1	0	2194	L	1	2612	0	0	object8	L	1	2612	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	53	1	2	1	1	14	14	experimental	3	Small ball - down	ig4fe.png	ig4.png	ig4feV3.wav	J	D	N	2	3		0	0	2194	0	0	2612	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	55	1	2	1	1	3	3	filler	1	Apple - right	ig1bc.png	ig1.png	ig1bcV1.wav	J	?	K	1	2		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	57	1	2	1	1	3	3	control	2	Large cup - up	ig1bc.png	ig1.png	ig1bcV3.wav	M	?	I	1	2	J	0	0	677	K	0	991	0	0	object5	K	0	991	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	59	1	2	1	1	3	3	filler	3	Cards - down	ig1bc.png	ig1.png	ig1bcV2.wav	H	?	L	1	2		0	0	-249371	0	0	0	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	61	1	2	1	1	12	12	experimental	1	Bottom holepunch - up	ig3ge.png	ig3.png	ig3geV2.wav	E	J	A	2	1		0	0	-244871	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	63	1	2	1	1	12	12	filler	2	Keys - left	ig3ge.png	ig3.png	ig3geV1.wav	L	?	K	2	1		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	65	1	2	1	1	12	12	filler	3	Fluffy toy - up	ig3ge.png	ig3.png	ig3geV3.wav	M	?	I	2	1		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	67	1	2	1	1	7	7	filler	1	Panda - up	ig2dc.png	ig2.png	ig2dcV4.wav	L	?	H	1	3		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	69	1	2	1	1	7	7	filler	2	Plane - down	ig2dc.png	ig2.png	ig2dcV3.wav	D	?	H	1	3		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	71	1	2	1	1	7	7	control	3	Top can - right	ig2dc.png	ig2.png	ig2dcV1.wav	F	?	G	1	3		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	73	1	2	1	1	6	6	experimental	1	Small candle - down	ig2ce.png	ig2.png	ig2ceV1.wav	D	E	H	2	1		0	0	-297040	0	0	0	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	75	1	2	1	1	6	6	filler	2	Stapler - up	ig2ce.png	ig2.png	ig2ceV2.wav	F	?	B	2	1		0	0	-292540	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	77	1	2	1	1	6	6	filler	3	Baby - left	ig2ce.png	ig2.png	ig2ceV3.wav	J	?	I	2	1		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	79	1	2	1	1	16	16	filler	1	Cow - down	ig4he.png	ig4.png	ig4heV1.wav	A	?	E	2	2		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	81	1	2	1	1	16	16	experimental	2	Top syringe - left	ig4he.png	ig4.png	ig4heV2.wav	K	F	J	2	2		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	83	1	2	1	1	16	16	filler	3	Fox - left	ig4he.png	ig4.png	ig4heV3.wav	H	?	G	2	2		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	85	1	2	1	1	1	1	filler	1	Top block - right	ig1ac.png	ig1.png	ig1acV2.wav	C	?	D	1	3		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	87	1	2	1	1	1	1	filler	2	Wallet - right	ig1ac.png	ig1.png	ig1acV3.wav	F	?	G	1	3		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	89	1	2	1	1	1	1	control	3	Bottom block - left	ig1ac.png	ig1.png	ig1acV4.wav	K	?	J	1	3		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	91	1	2	1	1	9	9	filler	1	Penknife - left	ig3ec.png	ig3.png	ig3ecV1.wav	L	?	K	1	2		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	93	1	2	1	1	9	9	control	2	Large jar - right	ig3ec.png	ig3.png	ig3ecV4.wav	I	?	J	1	2		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DP	5	DP	95	1	2	1	1	9	9	filler	3	Small jar - up	ig3ec.png	ig3.png	ig3ecV3.wav	G	?	C	1	2		0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DA_practice	7	practiceDA	2	1	2	1	2	np1	np1	practice		Pen - up	np1.png	nigp1.png	nP1V1.wav	J		F				0	0	0	0	0	0	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DA_practice	7	practiceDA	4	1	2	1	2	np1	np1	practice		Candle - down	np1.png	nigp1.png	nP1V2.wav	A		E				0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DA_practice	7	practiceDA	6	1	2	1	2	np1	np1	practice		Car - right	np1.png	nigp1.png	nP1V3.wav	G		H				0	0	4500	0	0	4500	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DA	8	DA	1	1	2	1	2	8	24	filler	1	Bottom car up	nig2le.png	nig2.png	ig2leV2.wav	O	?	K	2	2		0	0	0	0	0	0	0	0		0	0	4500	0
+6.5.1	mac	2021-12-03	11:56:53	1	1	1	DA	8	DA	3	1	2	1	2	8	24	experimental	2	Top car right	nig2le.png	nig2.png	ig2leV3.wav	I	B	J	2	2		0	0	4500	0	0	4500	0	0		0	0	4500	0

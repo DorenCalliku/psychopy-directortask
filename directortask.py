@@ -29,7 +29,7 @@ import sys  # to get file system encoding
 from psychopy.hardware import keyboard
 
 # --------- UPDATE ------------
-from utils import extract_experiment_steps
+from utils import extract_experiment_steps, position_elements
 structure = extract_experiment_steps('materials/experiment.xlsx')
 
 elements_names = set(
@@ -173,6 +173,7 @@ text_6 = visual.TextStim(win=win, name='text_6',
 
 # Initialize components for Routine "trial"
 trialClock = core.Clock()
+
 image_3 = visual.ImageStim(
     win=win,
     name='image_3', 
@@ -181,70 +182,11 @@ image_3 = visual.ImageStim(
     color=[1,1,1], colorSpace='rgb', opacity=None,
     flipHoriz=False, flipVert=False,
     texRes=128.0, interpolate=True, depth=0.0)
-pic1 = visual.ImageStim(
-    win=win,
-    name='pic1', 
-    image='materials/imgs/screwdriver.png', mask=None,
-    ori=0.0, pos=(-0.15, 0.15), size=(0.1, 0.1),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=-1.0)
-pic2 = visual.ImageStim(
-    win=win,
-    name='pic2', 
-    image='materials/imgs/egg.png', mask=None,
-    ori=0.0, pos=(-0.15, 0.0), size=(0.1, 0.1),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=-2.0)
-pic3 = visual.ImageStim(
-    win=win,
-    name='pic3', 
-    image='materials/imgs/sock1.png', mask=None,
-    ori=0.0, pos=(0.0, 0.15), size=(0.1, 0.1),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=-3.0)
-pic4 = visual.ImageStim(
-    win=win,
-    name='pic4', 
-    image='materials/imgs/spatula.png', mask=None,
-    ori=0.0, pos=(0, -0.14), size=(0.1, 0.1),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=-4.0)
-pic5 = visual.ImageStim(
-    win=win,
-    name='pic5', 
-    image='materials/imgs/deckofcards.png', mask=None,
-    ori=0.0, pos=(0.14, -0.14), size=(0.1, 0.1),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=-5.0)
-pic6 = visual.ImageStim(
-    win=win,
-    name='pic6', 
-    image='materials/imgs/baby.png', mask=None,
-    ori=0.0, pos=(-0.25, -0.28), size=(0.1, 0.1),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=-6.0)
-pic7 = visual.ImageStim(
-    win=win,
-    name='pic7', 
-    image='materials/imgs/wallet.png', mask=None,
-    ori=0.0, pos=(-0.15, -0.28), size=(0.1, 0.1),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=-7.0)
-pic8 = visual.ImageStim(
-    win=win,
-    name='pic8', 
-    image='materials/imgs/pen.png', mask=None,
-    ori=0.0, pos=(0.14, -0.28), size=(0.1, 0.1),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=-8.0)
+
+pictures = position_elements(win, structure['testtrials'] )
+for i, name in enumerate(pictures):
+    globals()[f"pic{i+1}"] = pictures[name]
+
 mouse = event.Mouse(win=win)
 x, y = [None, None]
 mouse.mouseClock = core.Clock()
@@ -608,7 +550,7 @@ routineTimer.reset()
 
 # ------Prepare to start Routine "trial"-------
 continueRoutine = True
-routineTimer.add(10000.000000)
+routineTimer.add(100.000000)
 # update component parameters for each repeat
 # setup some python lists for storing info about the mouse
 gotValidClick = False  # until a click is received

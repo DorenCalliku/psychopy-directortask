@@ -1,3 +1,8 @@
 psychopy
 wxPython
+
+# data manipulation
 pandas
+
+# for testing
+pytest

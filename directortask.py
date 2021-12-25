@@ -28,7 +28,7 @@ import sys  # to get file system encoding
 
 from psychopy.hardware import keyboard
 
-# --------- UPDATE ------------
+# --------- ANNELISE ------------
 from utils import extract_experiment_steps, position_elements
 structure = extract_experiment_steps('materials/experiment.xlsx')
 
@@ -39,7 +39,7 @@ elements_names = set(
         for j in val['elements'] if j is not None
     ]
 )
-# ------- END UPDATE --------
+# ------- ANNELISE END --------
 
 # Ensure that relative paths start from the same directory as this script
 _thisDir = os.path.dirname(os.path.abspath(__file__))
@@ -174,18 +174,14 @@ text_6 = visual.TextStim(win=win, name='text_6',
 # Initialize components for Routine "trial"
 trialClock = core.Clock()
 
-image_3 = visual.ImageStim(
-    win=win,
-    name='image_3', 
-    image='materials/imgs/igp1.png', mask=None,
-    ori=0.0, pos=(0, 0), size=(0.7, 0.7),
-    color=[1,1,1], colorSpace='rgb', opacity=None,
-    flipHoriz=False, flipVert=False,
-    texRes=128.0, interpolate=True, depth=0.0)
-
-pictures = position_elements(win, structure['testtrials'] )
+# ---------- ANNELISE ----------------
+# this creates all the pictures that you were previously using
+# check the utils.py document to see how the code is called
+# there check for `def position_elements(...)`
+image_3, pictures = position_elements(win, structure['testtrials'] )
 for i, name in enumerate(pictures):
     globals()[f"pic{i+1}"] = pictures[name]
+# ---------- ANNELISE END ------------
 
 mouse = event.Mouse(win=win)
 x, y = [None, None]
@@ -573,9 +569,12 @@ _timeToFirstFrame = win.getFutureFlipTime(clock="now")
 trialClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
 frameN = -1
 
+movements = []
+
 # -------Run Routine "trial"-------
 while continueRoutine and routineTimer.getTime() > 0:
     # get current time
+
     t = trialClock.getTime()
     tThisFlip = win.getFutureFlipTime(clock=trialClock)
     tThisFlipGlobal = win.getFutureFlipTime(clock=None)
@@ -736,14 +735,17 @@ while continueRoutine and routineTimer.getTime() > 0:
             pic8.setAutoDraw(False)
     for piece in pieces:
         if mouse.isPressedIn(piece) and movingPiece is None:
+            x, y = mouse.getPos()
             picked.append(piece)
+            print(x, y, picked)
     
     movingPiece = movePicked(picked, mouse, movingPiece)
     
     # check for quit (typically the Esc key)
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
+        x, y = mouse.getPos()
+        print(x, y, picked)
         core.quit()
-    
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         break

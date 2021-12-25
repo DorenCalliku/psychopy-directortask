@@ -31,6 +31,20 @@ def position_elements(win, elements):
     """
 
     pictures = {}
+    if elements['grid']:
+        grid_name = 'materials/imgs/' + elements['grid'].replace('grid ', '') + '.png'
+    else:
+        grid_name = 'materials/imgs/igp1.png'
+    background_image = visual.ImageStim(
+        win=win,
+        name='image_3', 
+        image=grid_name, mask=None,
+        ori=0.0, pos=(0, 0), size=(0.7, 0.7),
+        color=[1,1,1], colorSpace='rgb', opacity=None,
+        flipHoriz=False, flipVert=False,
+        texRes=128.0, interpolate=True, depth=0.0
+    )
+
     for i, val in enumerate(elements['data']):
         for j, key in enumerate(val):
             if key is not None:
@@ -48,4 +62,4 @@ def position_elements(win, elements):
                     flipHoriz=False, flipVert=False,
                     texRes=128.0, interpolate=True, depth=-len(pictures)
                 )
-    return pictures
+    return background_image, pictures

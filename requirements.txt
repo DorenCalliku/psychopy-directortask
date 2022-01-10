@@ -5,4 +5,5 @@ wxPython
 pandas
 
 # for testing
+black
 pytest

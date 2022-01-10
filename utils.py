@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from psychopy import visual
 
 
@@ -10,13 +11,14 @@ def extract_experiment_steps(filename):
     for key, vals in data.items():
 
         # all data in sheet
-        clean = vals.where(pd.notnull(vals), None).values.tolist()
+        clean = vals.replace({np.nan: None}).values.tolist()
 
         # grid condition
         grid = [j for i in clean[4:] for j in i if j != None]
+
         set_count = key.replace('set', '')
 
-        clean_data[key] = {
+        clean_data[key.replace(' ', '')] = {
             "data": clean[:4],
             "grid": grid[0] if grid != [] else None,
             "order": int(set_count) if set_count.isdigit() else None,
@@ -24,12 +26,29 @@ def extract_experiment_steps(filename):
         }
     return clean_data
 
+# ---------- ANNELISE ----------------
+# These are helpful methods to make the checks and the positioning of the objects
+# 'from position to picture' from your position in excel which can be 0,1,2,3 turns it into pixel position in table
+# 'from picture to position' takes the opposite
+# this is done for both x and y (because they have different formulas)
+
+def from_position_to_picture_x(pos_x):
+    return -0.28 + 0.14*pos_x
+
+def from_picture_to_position_x(pic_x):
+    return round((pic_x + 0.28)/0.14)
+
+def from_position_to_picture_y(pos_y):
+    return 0.14 + (-0.14) * pos_y + 0.01
+
+def from_picture_to_position_y(pic_y):
+    return round((pic_y - 0.14 - 0.01)/(-0.14))
+# ---------- ANNELISE END ----------------
 
 def position_elements(win, elements):
     """Gets elements['data'], for ex: [[None, 'what', ..]]
     and creates the pictures for each of the elements with the right positioning.
     """
-
     pictures = {}
     if elements['grid']:
         grid_name = 'materials/imgs/' + elements['grid'].replace('grid ', '') + '.png'
@@ -50,8 +69,8 @@ def position_elements(win, elements):
             if key is not None:
                 image_location = 'materials/imgs/' + key + '.png'
                 position = (
-                    -0.28 + 0.14*j,
-                    0.14 + (-0.14)*i + 0.01
+                    from_position_to_picture_x(j),
+                    from_position_to_picture_y(i)
                 )
                 pictures[key] = visual.ImageStim(
                     win=win,
@@ -62,4 +81,4 @@ def position_elements(win, elements):
                     flipHoriz=False, flipVert=False,
                     texRes=128.0, interpolate=True, depth=-len(pictures)
                 )
-    return background_image, pictures
+    return background_image, list(pictures.values())

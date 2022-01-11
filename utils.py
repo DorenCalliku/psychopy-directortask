@@ -33,13 +33,15 @@ def extract_experiment_steps(filename):
 # this is done for both x and y (because they have different formulas)
 
 def from_position_to_picture_x(pos_x):
-    return -0.28 + 0.14*pos_x
+    return -0.28 + 0.14 * pos_x
+
+def from_position_to_picture_y(pos_y):
+    return 0.14 + (-0.14) * pos_y + 0.01
+
 
 def from_picture_to_position_x(pic_x):
     return round((pic_x + 0.28)/0.14)
 
-def from_position_to_picture_y(pos_y):
-    return 0.14 + (-0.14) * pos_y + 0.01
 
 def from_picture_to_position_y(pic_y):
     return round((pic_y - 0.14 - 0.01)/(-0.14))

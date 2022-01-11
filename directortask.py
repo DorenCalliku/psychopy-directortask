@@ -14,19 +14,11 @@ If you publish work using this script the most relevant publication is:
 from __future__ import absolute_import, division
 
 import pprint 
-from psychopy import locale_setup
-from psychopy import prefs
-from psychopy import sound, gui, visual, core, data, event, logging, clock, colors
+from psychopy import gui, visual, core, data, event, logging
 from psychopy.constants import (NOT_STARTED, STARTED, PLAYING, PAUSED,
                                 STOPPED, FINISHED, PRESSED, RELEASED, FOREVER)
 
-import numpy as np  # whole numpy lib is available, prepend 'np.'
-from numpy import (sin, cos, tan, log, log10, pi, average,
-                   sqrt, std, deg2rad, rad2deg, linspace, asarray)
-from numpy.random import random, randint, normal, shuffle, choice as randchoice
 import os  # handy system and path functions
-import sys  # to get file system encoding
-
 from psychopy.hardware import keyboard
 
 # --------- ANNELISE ------------
@@ -537,18 +529,24 @@ routineTimer.add(100.000000)
 # setup some python lists for storing info about the mouse
 
 # this defines how the movement will happen
-def movePicked(picked, mouse, grabbed):
+def movePicked(pieces, mouse, grabbed):
     if grabbed is not None and mouse.isPressedIn(grabbed):
         grabbed.pos = mouse.getPos()
         return grabbed
     else:
-        for piece in picked:
+        for piece in pieces:
             if mouse.isPressedIn(piece) and grabbed is None:
                 return piece
 
+# INITIALIZES EXPERIMENT
+# this creates all the pictures that you were previously using
+# check the utils.py document to see how the code is called
 # initializes pictures in the background
 def initialize(set):
+
+    # give me image background and pieces to position at the window
     image_background, pieces = position_elements(win, structure[set])
+
     # keep track of which components have finished
     trialComponents = [image_background, mouse ] + pieces
     for thisComponent in trialComponents:
@@ -561,10 +559,7 @@ def initialize(set):
     return trialComponents, image_background, pieces
 
 # ---------- ANNELISE ----------------
-# INITIALIZES EXPERIMENT
-# this creates all the pictures that you were previously using
-# check the utils.py document to see how the code is called
-list_of_sets = ['testtrials'] + [f'set{i}' for i in range(10, 25)]
+list_of_sets = [f'set{i}' for i in range(10, 25)]
 step_count = 0
 picked = []
 movingPiece = None
@@ -580,9 +575,7 @@ trialClock.reset(-_timeToFirstFrame)  # t0 is time of first possible flip
 frameN = -1
 
 # initialize
-trialComponents, image_background, pieces = initialize(list_of_sets[step_count])
-step_count += 1
-
+trialComponents, image_background, pieces = initialize('testtrials')
 while continueRoutine and routineTimer.getTime() > 0:
 
     # get current time
@@ -647,9 +640,13 @@ while continueRoutine and routineTimer.getTime() > 0:
     # function below checks if the mouse was released, this way we store the information and go to next round
     if not any(mouse.isPressedIn(piece) for piece in pieces) and mouse_clicked_important == True and movingPiece is not None:
 
+        # where am I as a mouse
         x, y = mouse.getPos()
         current_pos = (from_picture_to_position_x(x), from_picture_to_position_y(y))
-
+        if picked != [] and movingPiece == picked[-1]:
+            print(movingPiece)
+        print(movingPiece.name)
+    
         # if the position did not change, dont skip
         if not current_pos == current_movement['start_pos']:
             current_movement['end'] = (x, y)
@@ -658,6 +655,9 @@ while continueRoutine and routineTimer.getTime() > 0:
 
             mouse_clicked_important = False
             current_movement = None
+
+            # movingPiece = None
+            pprint.pprint(movements)
 
             for thisComponent in trialComponents:
                 if hasattr(thisComponent, "setAutoDraw"):
@@ -670,6 +670,8 @@ while continueRoutine and routineTimer.getTime() > 0:
                 step_count += 1
             else:
                 break
+        else:
+            pprint.pprint({i: vals for i, vals in globals().items() if i == 'picked' or i =='pieces'})
 
     movingPiece = movePicked(picked, mouse, movingPiece)
     # ---------- ANNELISE END ----------------
@@ -678,6 +680,7 @@ while continueRoutine and routineTimer.getTime() > 0:
     if endExpNow or defaultKeyboard.getKeys(keyList=["escape"]):
         x, y = mouse.getPos()
         core.quit()
+
     # check if all components have finished
     if not continueRoutine:  # a component has requested a forced-end of Routine
         break

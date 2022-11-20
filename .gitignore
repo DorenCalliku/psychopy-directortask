@@ -1,4 +1,6 @@
 results/
+data/
+materials/imgs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -7,7 +7,7 @@ Psychopy implementation of Director Task, as described by Dumontheil et al. (201
 Material needed to make it work:
 
 - experiment.xlsx: an excel file, containing in each sheet the distribution of pictures in the set. To be put in `materials/` folder.
-- images and sounds: to be put under `materials/imgs` folder. They can be based on the distribution as mentioned at [IDCNLab](https://sites.google.com/site/idcnlab/director-task?pli=1) lab.
+- images and sounds: to be put under `materials/imgs` folder. They can be based on the distribution as mentioned at [IDCNLab](https://sites.google.com/site/idcnlab/director-task?pli=1) work. As you can see below, there might be different versions of an object (for example `car1`), and they are stored as described (e.g. `materials/imgs/car1.png`). Check `utils.py` for understanding more.
 
 ![Director task: example setup.](experiment-file.png)
 
